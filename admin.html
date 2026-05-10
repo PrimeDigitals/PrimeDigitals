@@ -159,6 +159,7 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="sidebar-logo">Prime<span>Digitals</span></div>
     <div class="sidebar-lbl">Management</div>
     <div class="nav-item active" onclick="showTab('orders',this)"><span>📋</span> Orders</div>
+    <div class="nav-item" onclick="showTab('invoices',this)"><span>📄</span> Invoices</div>
     <div class="nav-item" onclick="showTab('products',this)"><span>📦</span> Products</div>
     <div class="nav-item" onclick="showTab('settings',this)"><span>⚙️</span> Settings</div>
     <div class="nav-item" onclick="showTab('preview',this)"><span>👁️</span> Preview Store</div>
@@ -213,6 +214,41 @@ tr:hover td{background:rgba(201,168,76,.015);}
               </tr>
             </thead>
             <tbody id="ordersTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div id="tab-invoices" class="tab-content">
+      <div class="page-header">
+        <div class="page-title">Invoices Management</div>
+        <div class="page-sub">View and manage all invoices with QR verification</div>
+      </div>
+      
+      <div class="stats-row">
+        <div class="stat-card"><div class="s-label">Total Invoices</div><div class="s-val" id="is_total">0</div></div>
+        <div class="stat-card"><div class="s-label">This Month</div><div class="s-val" id="is_month">0</div></div>
+        <div class="stat-card"><div class="s-label">Verified</div><div class="s-val" id="is_verified">0</div></div>
+        <div class="stat-card"><div class="s-label">Revenue</div><div class="s-val" id="is_revenue">$0</div></div>
+      </div>
+
+      <div class="scard">
+        <div class="filter-row">
+          <input type="text" id="searchInvoice" placeholder="Search..." onkeyup="renderInvoicesTable()">
+          <select id="filterInvoiceStatus" onchange="renderInvoicesTable()">
+            <option value="">All Status</option>
+            <option value="Completed">Paid</option>
+            <option value="Pending">Pending</option>
+          </select>
+          <button class="btn-sm btn-blue" onclick="refreshInvoicesFromFirebase()">🔄 Refresh</button>
+          <span class="orders-count" id="invoicesCount">0 invoices</span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table id="invoicesTable">
+            <thead>
+              <tr><th>Invoice #</th><th>Order ID</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr>
+            </thead>
+            <tbody></tbody>
           </table>
         </div>
       </div>
@@ -607,6 +643,7 @@ function showTab(tab,el){
   el.classList.add('active');
   if(tab==='preview')document.getElementById('previewFrame').src='index.html';
   if(tab==='orders')renderOrdersTable();
+  if(tab==='invoices'){renderInvoiceStats();renderInvoicesTable();}
   if(tab==='products'){renderProdStats();renderProdsTable();}
   if(tab==='settings')loadSettingsForm();
 }
@@ -694,6 +731,87 @@ function renderOrdersTable(){
   }).join('');
 }
 
+// 📄 INVOICES MANAGEMENT FUNCTIONS
+function renderInvoiceStats(){
+  const orders=getOrders().filter(o=>o.invoiceNumber);
+  const now=new Date();
+  const thisMonth=orders.filter(o=>{
+    const oDate=new Date(o.date);
+    return oDate.getMonth()===now.getMonth()&&oDate.getFullYear()===now.getFullYear();
+  });
+  const totalRevenue=orders
+    .filter(o=>o.status==='Completed')
+    .reduce((sum,o)=>sum+(parseFloat(o.priceUSD||o.price)||0),0);
+  
+  document.getElementById('is_total').textContent=orders.length;
+  document.getElementById('is_month').textContent=thisMonth.length;
+  document.getElementById('is_verified').textContent=orders.filter(o=>o.status==='Completed').length;
+  document.getElementById('is_revenue').textContent='$'+totalRevenue.toFixed(2);
+}
+
+function renderInvoicesTable(){
+  const orders=getOrders().filter(o=>o.invoiceNumber);
+  const search=document.getElementById('searchInvoice').value.toLowerCase();
+  const status=document.getElementById('filterInvoiceStatus').value;
+  
+  let filtered=orders.filter(o=>{
+    if(search&&!JSON.stringify(o).toLowerCase().includes(search))return false;
+    if(status&&o.status!==status)return false;
+    return true;
+  });
+  filtered.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  
+  document.getElementById('invoicesCount').textContent=filtered.length+' invoices';
+  const tbody=document.querySelector('#invoicesTable tbody');
+  tbody.innerHTML='';
+  
+  filtered.forEach(inv=>{
+    const tr=document.createElement('tr');
+    const invoiceURL=createAdminInvoiceURL(inv);
+    tr.innerHTML=`
+      <td style="font-family:monospace;font-weight:700;color:var(--gold);">${inv.invoiceNumber}</td>
+      <td style="font-family:monospace;font-size:12px;color:var(--muted);">${inv.id.substring(0,8)}</td>
+      <td>${inv.customerEmail}</td><td>${inv.product}</td>
+      <td style="font-weight:600;">${inv.priceDisplay||inv.currency+' '+inv.priceUSD}</td>
+      <td><span class="badge ${inv.status==='Completed'?'badge-green':'badge-orange'}">${inv.status==='Completed'?'✓ Paid':'⏳ Pending'}</span></td>
+      <td>${new Date(inv.date).toLocaleDateString()}</td>
+      <td class="td-actions">
+        <button class="btn-sm btn-blue" onclick="window.open('${invoiceURL}','_blank')">👁️ View</button>
+        <button class="btn-sm btn-outline" onclick="copyInvoiceLink('${invoiceURL}')">📋 Copy Link</button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function createAdminInvoiceURL(order){
+  const baseURL = 'https://primedigitals.github.io/invoice.html';
+  const params=new URLSearchParams({
+    orderId:order.id, invoice:order.invoiceNumber, name:order.payerName||order.customerEmail,
+    email:order.customerEmail, product:order.product, price:order.priceUSD||order.price,
+    currency:order.currency||'USD', period:order.period, method:order.paymentMethod,
+    status:order.status, date:order.date, credEmail:order.activationEmail||'',
+    credPassword:order.accountPassword||'', credUsername:order.socialUsername||''
+  });
+  return `${baseURL}?${params.toString()}`;
+}
+
+function copyInvoiceLink(url){
+  navigator.clipboard.writeText(url).then(()=>showToast('✅ Invoice link copied!','success'));
+}
+
+async function refreshInvoicesFromFirebase(){
+  showToast('Refreshing from Firebase...','success');
+  if(window.fbGetOrders){
+      const fbOrders = await window.fbGetOrders();
+      if(fbOrders && fbOrders.length > 0){
+          localStorage.setItem('pd_orders', JSON.stringify(fbOrders));
+          renderOrderStats(); renderOrdersTable(); renderInvoiceStats(); renderInvoicesTable();
+          showToast('Sync Complete ✓', 'success');
+      }
+  }
+}
+
 function toggleOrderDetail(id){
   const row=document.getElementById('detail-'+id);
   if(!row)return;
@@ -752,7 +870,7 @@ function printInvoice(id){
   const s=getS();
   const date=new Date(o.date).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   const displayAmt = o.priceDisplay || ('$'+o.price+' USD');
-  const invUrl = window.location.origin + '/invoice.html?orderId=' + o.id + '&invoice=' + o.invoiceNumber + '&name=' + encodeURIComponent(o.payerName || o.customerEmail) + '&email=' + o.customerEmail + '&product=' + encodeURIComponent(o.product) + '&price=' + o.price + '&currency=' + (o.currency || 'USD') + '&method=' + encodeURIComponent(o.paymentMethod || 'Manual') + '&status=' + (o.status || 'Completed');
+  const invUrl = createAdminInvoiceURL(o);
   
   if(confirm("Do you want to view the Online QR Invoice? Click Cancel to print PDF instead.")){
       window.open(invUrl, '_blank');
@@ -843,7 +961,6 @@ function openInvoiceModal() {
     const prods = getProds();
     pSelect.innerHTML = '<option value="">-- Choose from Products --</option>' + 
         prods.map(p => `<option value="${p.id}">${p.name} - $${p.price}</option>`).join('');
-    
     document.getElementById('manualInvoiceModal').classList.add('open');
 }
 
@@ -854,9 +971,7 @@ function closeManualInvoiceModal() {
 function autoFillProductData() {
     const id = document.getElementById('m_product_select').value;
     const prod = getProds().find(p => String(p.id) === String(id));
-    if(prod) {
-        document.getElementById('m_price').value = prod.price;
-    }
+    if(prod) { document.getElementById('m_price').value = prod.price; }
 }
 
 async function generateManualInvoice() {
@@ -866,10 +981,7 @@ async function generateManualInvoice() {
     const price = document.getElementById('m_price').value;
     const method = document.getElementById('m_method').value;
 
-    if(!email || !price) {
-        showToast('Please fill Email and Price', 'error');
-        return;
-    }
+    if(!email || !price) { showToast('Please fill Email and Price', 'error'); return; }
 
     const prod = getProds().find(p => String(p.id) === String(prodId)) || { name: "Manual Invoice Service", cat: "Custom", type: "software" };
     
@@ -890,22 +1002,19 @@ async function generateManualInvoice() {
         period: prod.period || 'Manual'
     };
 
-    // 1. Sync to Firebase for QR validity
     if(window.fbAddManualOrder) {
         showToast('Saving to Firebase...', 'success');
         await window.fbAddManualOrder(orderData);
     }
 
-    // 2. Save Locally
     const orders = getOrders();
     orders.unshift(orderData);
     setOrders(orders);
 
     closeManualInvoiceModal();
-    renderOrderStats();
-    renderOrdersTable();
+    renderOrderStats(); renderOrdersTable();
     
-    const invUrl = window.location.origin + '/invoice.html?orderId=' + orderData.id + '&invoice=' + orderData.invoiceNumber + '&name=' + encodeURIComponent(name || email) + '&email=' + email + '&product=' + encodeURIComponent(prod.name) + '&price=' + price + '&currency=USD&method=' + encodeURIComponent(method) + '&status=Completed';
+    const invUrl = createAdminInvoiceURL(orderData);
 
     if(confirm('✅ Invoice Generated!\n\nClick OK to View/Print QR Invoice\nClick Cancel to Copy Link only.')) {
         window.open(invUrl, '_blank');
@@ -1016,27 +1125,23 @@ function saveProd(){
     feats:document.getElementById('p_feats').value.split('\n').map(f=>f.trim()).filter(Boolean)
   };
 
-  // Save to localStorage
   if(eid){
     const i=prods.findIndex(x=>String(x.id)===String(eid));
     if(i>-1)prods[i]={...prods[i],...prod};
-    // Sync to Firebase
     if(window.fbUpdateProd && prods[i]&&prods[i]._fbId){
       window.fbUpdateProd(prods[i]._fbId, prod).then(()=>showToast('Synced to Firebase ✓','success')).catch(e=>console.error(e));
     }
   } else {
     prods.push(prod);
-    // Add to Firebase
     if(window.fbAddProd){
       window.fbAddProd(prod).then(fbId=>{
         prod._fbId=fbId;
-        // Update localStorage with fbId
         const newProds=getProds();
         const idx=newProds.findIndex(x=>String(x.id)===String(prod.id));
         if(idx>-1){newProds[idx]._fbId=fbId;setProds(newProds);}
         renderProdsTable();
         showToast('Added to Firebase ✓','success');
-      }).catch(e=>console.error('Firebase add error:',e));
+      });
     }
   }
   setProds(prods);
@@ -1049,7 +1154,6 @@ function deleteProd(id){
   if(!confirm('Delete this product?'))return;
   const prods=getProds();
   const prod=prods.find(x=>String(x.id)===String(id));
-  // Delete from Firebase if has fbId
   if(prod&&prod._fbId&&window.fbDeleteProd){
     window.fbDeleteProd(prod._fbId).then(()=>console.log('Deleted from Firebase')).catch(e=>console.error(e));
   }
@@ -1074,16 +1178,14 @@ function loadSettingsForm(){
   document.getElementById('s_emailjsPublicKey').value=s.emailjsPublicKey||'';
   document.getElementById('s_customerTemplateId').value=s.customerTemplateId||'';
   document.getElementById('s_adminTemplateId').value=s.adminTemplateId||'';
-  
-  // Load new fields
   document.getElementById('s_storePhone').value=s.storePhone||'+20 123 456 7890';
   document.getElementById('s_storeLocation').value=s.storeLocation||'Cairo, Egypt';
-  document.getElementById('s_aboutEN').value=s.aboutEN||'PrimeDigitals is your ultimate destination for premium digital assets and software solutions. We specialize in providing instant access to software subscriptions, social media growth services, and cutting-edge AI tools designed to streamline your workflow and amplify your digital presence.';
-  document.getElementById('s_aboutAR').value=s.aboutAR||'برايم ديجيتالز هي وجهتك المثالية للحصول على الأصول الرقمية المميزة والحلول البرمجية. نحن متخصصون في توفير وصول فوري لاشتراكات البرامج وخدمات تنمية حسابات التواصل الاجتماعي.';
-  document.getElementById('s_privacyEN').value=s.privacyEN||'At PrimeDigitals, we prioritize the security of our customers\' data. We collect necessary details such as your email address and payment information solely to process orders and deliver digital licenses.';
-  document.getElementById('s_privacyAR').value=s.privacyAR||'في برايم ديجيتالز، نضع أمن بيانات عملائنا على رأس أولوياتنا. نجمع التفاصيل الضرورية مثل بريدك الإلكتروني ومعلومات الدفع فقط لمعالجة الطلبات.';
-  document.getElementById('s_refundEN').value=s.refundEN||'Due to the nature of digital goods and instant delivery, refunds are only issued if a digital license or subscription fails to work and we are unable to provide a replacement within 48 hours.';
-  document.getElementById('s_refundAR').value=s.refundAR||'نظراً لطبيعة المنتجات الرقمية والتسليم الفوري، يتم استرداد المبالغ فقط في حالة عدم عمل الترخيص الرقمي وعدم قدرتنا على توفير بديل خلال 48 ساعة.';
+  document.getElementById('s_aboutEN').value=s.aboutEN||'PrimeDigitals is your destination for digital assets.';
+  document.getElementById('s_aboutAR').value=s.aboutAR||'برايم ديجيتالز وجهتكم للأصول الرقمية.';
+  document.getElementById('s_privacyEN').value=s.privacyEN||'We prioritize data security.';
+  document.getElementById('s_privacyAR').value=s.privacyAR||'نحن نهتم بأمن البيانات.';
+  document.getElementById('s_refundEN').value=s.refundEN||'Refunds issued if license fails.';
+  document.getElementById('s_refundAR').value=s.refundAR||'يتم الاسترداد إذا لم يعمل الترخيص.';
 }
 function saveSettings(){
   const s=getS();
@@ -1101,8 +1203,6 @@ function saveSettings(){
   s.adminTemplateId=document.getElementById('s_adminTemplateId').value.trim();
   const pw=document.getElementById('s_adminPassword').value;
   if(pw)s.adminPassword=pw;
-  
-  // Save new fields
   s.storePhone=document.getElementById('s_storePhone').value.trim();
   s.storeLocation=document.getElementById('s_storeLocation').value.trim();
   s.aboutEN=document.getElementById('s_aboutEN').value.trim();
@@ -1111,33 +1211,19 @@ function saveSettings(){
   s.privacyAR=document.getElementById('s_privacyAR').value.trim();
   s.refundEN=document.getElementById('s_refundEN').value.trim();
   s.refundAR=document.getElementById('s_refundAR').value.trim();
-  
-  // Save to localStorage
   setS(s);
-  
-  // 🔥 Sync to Firebase
   if(window.fbSaveSettings){
-    const fbSettings = {...s};
-    delete fbSettings.adminPassword; // Don't store password in Firebase for security
-    window.fbSaveSettings(fbSettings).then(()=>{
-      showToast('✓ Settings saved & synced to Firebase!','success');
-    }).catch(e=>{
-      console.error('Firebase sync error:',e);
-      showToast('Settings saved locally (Firebase sync failed)','success');
-    });
-  } else {
-    showToast('Settings saved locally!','success');
-  }
+    const fbSettings = {...s}; delete fbSettings.adminPassword;
+    window.fbSaveSettings(fbSettings).then(()=>showToast('✓ Settings synced to Firebase!','success')).catch(e=>showToast('Settings saved locally','success'));
+  } else { showToast('Settings saved locally!','success'); }
 }
 
-// ── TOAST ──────────────────────────────────────────────────
 function showToast(msg,type='success'){
   const t=document.getElementById('toast');
   t.textContent=msg;t.className=`toast ${type} show`;
   setTimeout(()=>t.classList.remove('show'),3000);
 }
 
-// ── CLOSE MODALS ───────────────────────────────────────────
 document.getElementById('prodModal').addEventListener('click',e=>{if(e.target.id==='prodModal')closeProdModal();});
 document.getElementById('statusModal').addEventListener('click',e=>{if(e.target.id==='statusModal')document.getElementById('statusModal').classList.remove('open');});
 document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.target.id==='manualInvoiceModal')closeManualInvoiceModal();});
@@ -1145,10 +1231,7 @@ document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import {
-    getFirestore, collection, addDoc, getDocs,
-    doc, deleteDoc, updateDoc, serverTimestamp, setDoc, getDoc
-  } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  import { getFirestore, collection, addDoc, getDocs, doc, deleteDoc, updateDoc, serverTimestamp, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
   const firebaseConfig = {
     apiKey: "AIzaSyCGm3VNJSnCqJ4kgl6qHY7BBCBYFjPhcwU",
@@ -1161,7 +1244,6 @@ document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.
   };
 
   const badge = document.getElementById('fbBadge');
-
   try {
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -1169,18 +1251,14 @@ document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.
     const settingsDoc = doc(db, "config", "settings");
     const ordersCol = collection(db, "orders");
 
-    // 🔥 LOAD SETTINGS FROM FIREBASE
     const settingsSnap = await getDoc(settingsDoc);
     if(settingsSnap.exists()){
       const fbSettings = settingsSnap.data();
-      // Merge with localStorage (Firebase takes priority)
       const localSettings = JSON.parse(localStorage.getItem('pd_settings')||'{}');
       const merged = {...localSettings, ...fbSettings};
       localStorage.setItem('pd_settings', JSON.stringify(merged));
-      console.log('✓ Settings loaded from Firebase');
     }
 
-    // 🔥 LOAD PRODUCTS FROM FIREBASE
     const snapshot = await getDocs(prodsCol);
     if(snapshot.size > 0){
       const localProds = JSON.parse(localStorage.getItem('pd_products')||'[]');
@@ -1190,57 +1268,33 @@ document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.
         fbProds.push({ id: d.id, _fbId: d.id, ...data, price: parseFloat(data.price)||0 });
       });
       const merged = [...fbProds];
-      localProds.forEach(lp => {
-        if(!merged.some(fp=>String(fp.id)===String(lp.id)||fp._fbId===lp._fbId)){
-          merged.push(lp);
-        }
-      });
+      localProds.forEach(lp => { if(!merged.some(fp=>String(fp.id)===String(lp.id)||fp._fbId===lp._fbId)) merged.push(lp); });
       localStorage.setItem('pd_products', JSON.stringify(merged));
-      if(window.renderProdStats) renderProdStats();
-      if(window.renderProdsTable) renderProdsTable();
+      if(window.renderProdStats) renderProdStats(); if(window.renderProdsTable) renderProdsTable();
     }
 
-    badge.className='fb-status fb-ok';
-    badge.textContent='✓ Firebase Connected';
+    badge.className='fb-status fb-ok'; badge.textContent='✓ Firebase Connected';
 
-    // 🔥 EXPOSE CRUD FUNCTIONS
     window.fbAddProd = async function(prodData){
-      const ref = await addDoc(prodsCol, {...prodData, createdAt: serverTimestamp()});
-      return ref.id;
+      const ref = await addDoc(prodsCol, {...prodData, createdAt: serverTimestamp()}); return ref.id;
     };
-
     window.fbUpdateProd = async function(fbId, prodData){
       await updateDoc(doc(db,'products',fbId), {...prodData, updatedAt: serverTimestamp()});
     };
-
-    window.fbDeleteProd = async function(fbId){
-      await deleteDoc(doc(db,'products',fbId));
-    };
-
-    // 🔥 SAVE SETTINGS TO FIREBASE
+    window.fbDeleteProd = async function(fbId){ await deleteDoc(doc(db,'products',fbId)); };
     window.fbSaveSettings = async function(settingsData){
       await setDoc(settingsDoc, {...settingsData, updatedAt: serverTimestamp()}, {merge: true});
-      console.log('✓ Settings synced to Firebase');
     };
-
-    // 🔥 MANUAL ORDER SYNC
     window.fbAddManualOrder = async function(orderData) {
-        try {
-            await addDoc(ordersCol, {
-                ...orderData,
-                createdAt: serverTimestamp()
-            });
-            return true;
-        } catch(e) {
-            console.error("Firebase Sync Error:", e);
-            return false;
-        }
+        try { await addDoc(ordersCol, { ...orderData, createdAt: serverTimestamp() }); return true; } catch(e) { return false; }
+    };
+    window.fbGetOrders = async function(){
+        const snap = await getDocs(ordersCol); const os = [];
+        snap.forEach(d => os.push({ id: d.id, ...d.data() })); return os;
     };
 
   } catch(e) {
-    badge.className='fb-status fb-err';
-    badge.textContent='✗ Firebase Error: '+e.message;
-    console.error('Firebase admin error:', e);
+    badge.className='fb-status fb-err'; badge.textContent='✗ Firebase Error'; console.error(e);
   }
 </script>
 </body>
