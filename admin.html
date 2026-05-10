@@ -48,7 +48,7 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .logout-btn:hover{border-color:rgba(220,60,60,.4);color:#ff6b6b;}
 
 .main{flex:1;padding:30px 34px;overflow-y:auto;}
-.page-header{margin-bottom:28px;}
+.page-header{margin-bottom:28px; display: flex; justify-content: space-between; align-items: center;}
 .page-title{font-family:var(--serif);font-size:30px;font-weight:700;margin-bottom:4px;}
 .page-sub{font-size:14px;color:var(--muted);}
 .tab-content{display:none;}
@@ -141,7 +141,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="loginScreen">
   <div class="login-box">
     <div class="login-logo">Prime<span>Digitals</span></div>
@@ -153,11 +152,9 @@ tr:hover td{background:rgba(201,168,76,.015);}
   </div>
 </div>
 
-<!-- DASHBOARD -->
 <div id="dashboard">
 <div class="layout">
 
-  <!-- SIDEBAR -->
   <div class="sidebar">
     <div class="sidebar-logo">Prime<span>Digitals</span></div>
     <div class="sidebar-lbl">Management</div>
@@ -170,14 +167,15 @@ tr:hover td{background:rgba(201,168,76,.015);}
     </div>
   </div>
 
-  <!-- MAIN -->
   <div class="main">
 
-    <!-- ORDERS TAB -->
     <div class="tab-content active" id="tab-orders">
       <div class="page-header">
-        <div class="page-title">Orders</div>
-        <div class="page-sub">All customer orders with full details and invoices</div>
+        <div>
+            <div class="page-title">Orders</div>
+            <div class="page-sub">All customer orders with full details and invoices</div>
+        </div>
+        <button class="btn-sm" onclick="openInvoiceModal()">+ Create Manual Invoice</button>
       </div>
       <div class="stats-row" id="orderStatsRow"></div>
       <div class="scard">
@@ -220,7 +218,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
       </div>
     </div>
 
-    <!-- PRODUCTS TAB -->
     <div class="tab-content" id="tab-products">
       <div class="page-header">
         <div class="page-title">Products</div>
@@ -244,7 +241,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
       </div>
     </div>
 
-    <!-- SETTINGS TAB -->
     <div class="tab-content" id="tab-settings">
       <div class="page-header">
         <div class="page-title">Settings</div>
@@ -252,7 +248,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
       </div>
       <div class="settings-grid">
 
-        <!-- Store Settings -->
         <div class="settings-section">
           <div class="settings-header">🏪 Store Settings</div>
           <div class="settings-body">
@@ -271,7 +266,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- Currency Settings -->
         <div class="settings-section">
           <div class="settings-header">💱 Currency & Exchange Rates</div>
           <div class="settings-body">
@@ -295,7 +289,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- PayPal -->
         <div class="settings-section">
           <div class="settings-header">💳 PayPal Business</div>
           <div class="settings-body">
@@ -312,7 +305,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- PayMob -->
         <div class="settings-section">
           <div class="settings-header">🟢 PayMob — Card & Wallet Payments (MENA)</div>
           <div class="settings-body">
@@ -351,7 +343,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- EmailJS -->
         <div class="settings-section">
           <div class="settings-header">📧 EmailJS — Email Delivery</div>
           <div class="settings-body">
@@ -389,7 +380,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- Store Contact & Content -->
         <div class="settings-section">
           <div class="settings-header">📞 Store Contact & Location</div>
           <div class="settings-body">
@@ -411,7 +401,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- About Us -->
         <div class="settings-section">
           <div class="settings-header">ℹ️ About Us</div>
           <div class="settings-body">
@@ -426,7 +415,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- Privacy Policy -->
         <div class="settings-section">
           <div class="settings-header">🔒 Privacy Policy</div>
           <div class="settings-body">
@@ -441,7 +429,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
           </div>
         </div>
 
-        <!-- Refund Policy -->
         <div class="settings-section">
           <div class="settings-header">↩️ Refund & Cancellation Policy</div>
           <div class="settings-body">
@@ -460,7 +447,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
       </div>
     </div>
 
-    <!-- PREVIEW TAB -->
     <div class="tab-content" id="tab-preview">
       <div class="page-header">
         <div class="page-title">Store Preview</div>
@@ -477,7 +463,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
 </div>
 </div>
 
-<!-- PRODUCT MODAL -->
 <div class="ov" id="prodModal">
   <div class="mo">
     <div class="mo-title" id="prodModalTitle">Add Product</div>
@@ -534,7 +519,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
   </div>
 </div>
 
-<!-- ORDER STATUS MODAL -->
 <div class="ov" id="statusModal">
   <div class="mo" style="max-width:360px">
     <div class="mo-title">Update Order Status</div>
@@ -548,6 +532,42 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="mo-actions">
       <button class="btn-sm btn-outline" onclick="document.getElementById('statusModal').classList.remove('open')">Cancel</button>
       <button class="btn-sm" onclick="applyStatus()">Update</button>
+    </div>
+  </div>
+</div>
+
+<div class="ov" id="manualInvoiceModal">
+  <div class="mo" style="max-width: 600px;">
+    <div class="mo-title">Issue New Invoice</div>
+    <div class="config-note">إصدار فاتورة يدوية سيقوم بحفظها في Firebase لتكون صالحة للتحقق عبر QR Code.</div>
+    
+    <div class="form-group">
+        <label class="flabel">Select Product</label>
+        <select class="fselect" id="m_product_select" onchange="autoFillProductData()">
+            <option value="">-- Choose from Products --</option>
+        </select>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group"><label class="flabel">Customer Name</label><input type="text" class="finput" id="m_cust_name" placeholder="John Doe"/></div>
+      <div class="form-group"><label class="flabel">Customer Email</label><input type="email" class="finput" id="m_cust_email" placeholder="client@example.com"/></div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group"><label class="flabel">Price (USD)</label><input type="number" class="finput" id="m_price" step="0.01"/></div>
+        <div class="form-group">
+            <label class="flabel">Payment Method</label>
+            <select class="fselect" id="m_method">
+                <option value="PayPal">PayPal</option>
+                <option value="Bank Transfer">Bank Transfer</option>
+                <option value="Cash">Cash / Manual</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="mo-actions">
+      <button class="btn-sm btn-outline" onclick="closeManualInvoiceModal()">Cancel</button>
+      <button class="btn-sm" onclick="generateManualInvoice()">🚀 Generate & Save Invoice</button>
     </div>
   </div>
 </div>
@@ -732,6 +752,13 @@ function printInvoice(id){
   const s=getS();
   const date=new Date(o.date).toLocaleDateString('en-US',{year:'numeric',month:'long',day:'numeric'});
   const displayAmt = o.priceDisplay || ('$'+o.price+' USD');
+  const invUrl = window.location.origin + '/invoice.html?orderId=' + o.id + '&invoice=' + o.invoiceNumber + '&name=' + encodeURIComponent(o.payerName || o.customerEmail) + '&email=' + o.customerEmail + '&product=' + encodeURIComponent(o.product) + '&price=' + o.price + '&currency=' + (o.currency || 'USD') + '&method=' + encodeURIComponent(o.paymentMethod || 'Manual') + '&status=' + (o.status || 'Completed');
+  
+  if(confirm("Do you want to view the Online QR Invoice? Click Cancel to print PDF instead.")){
+      window.open(invUrl, '_blank');
+      return;
+  }
+
   const html=`<!DOCTYPE html>
 <html><head><meta charset="UTF-8"/><title>Invoice — ${o.id}</title>
 <style>
@@ -767,7 +794,7 @@ function printInvoice(id){
 <div class="page">
   <div class="header">
     <div><div class="logo">Prime<span>Digitals</span></div><div style="font-size:12px;color:#888;margin-top:5px">${s.storeEmail||'support@primedigitals.com'}</div></div>
-    <div class="invoice-label"><h2>Invoice</h2><div class="inv-num">${o.id}</div><div class="inv-date">${date}</div></div>
+    <div class="invoice-label"><h2>Invoice</h2><div class="inv-num">${o.invoiceNumber || o.id}</div><div class="inv-date">${date}</div></div>
   </div>
   <div class="info-grid">
     <div>
@@ -778,7 +805,7 @@ function printInvoice(id){
     <div>
       <div class="section-title">Order Details</div>
       <div class="info-block"><label>Order Type</label><p style="text-transform:capitalize">${o.type||'software'}</p></div>
-      <div class="info-block" style="margin-top:10px"><label>Payment Method</label><p>${o.paymentMethod||'PayPal'}</p></div>
+      <div class="info-block" style="margin-top:10px"><label>Payment Method</label><p>${o.paymentMethod||'Manual'}</p></div>
       ${o.type==='social'&&o.socialUsername?`<div class="info-block" style="margin-top:10px"><label>Social Account</label><p>${o.socialUsername}</p></div>`:''}
       ${o.type!=='social'&&o.activationEmail?`<div class="info-block" style="margin-top:10px"><label>Activation Email</label><p>${o.activationEmail}</p></div>`:''}
     </div>
@@ -800,7 +827,7 @@ function printInvoice(id){
   <div class="footer-note">
     Thank you for your purchase at <strong>PrimeDigitals</strong>.<br/>
     For support, contact us at <strong>${s.storeEmail||'support@primedigitals.com'}</strong><br/>
-    Payment processed securely via ${o.paymentMethod||'PayPal'}.
+    Payment processed securely via ${o.paymentMethod||'Manual'}.
   </div>
   <div style="text-align:center;margin-top:24px">
     <button onclick="window.print()" style="padding:10px 24px;background:#C9A84C;color:#09090F;border:none;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer;font-family:sans-serif">Print / Save as PDF</button>
@@ -808,6 +835,84 @@ function printInvoice(id){
 </div></body></html>`;
   const win=window.open('','_blank');
   win.document.write(html);win.document.close();
+}
+
+// ── MANUAL INVOICE FUNCTIONS ──────────────────────────────
+function openInvoiceModal() {
+    const pSelect = document.getElementById('m_product_select');
+    const prods = getProds();
+    pSelect.innerHTML = '<option value="">-- Choose from Products --</option>' + 
+        prods.map(p => `<option value="${p.id}">${p.name} - $${p.price}</option>`).join('');
+    
+    document.getElementById('manualInvoiceModal').classList.add('open');
+}
+
+function closeManualInvoiceModal() {
+    document.getElementById('manualInvoiceModal').classList.remove('open');
+}
+
+function autoFillProductData() {
+    const id = document.getElementById('m_product_select').value;
+    const prod = getProds().find(p => String(p.id) === String(id));
+    if(prod) {
+        document.getElementById('m_price').value = prod.price;
+    }
+}
+
+async function generateManualInvoice() {
+    const prodId = document.getElementById('m_product_select').value;
+    const name = document.getElementById('m_cust_name').value.trim();
+    const email = document.getElementById('m_cust_email').value.trim();
+    const price = document.getElementById('m_price').value;
+    const method = document.getElementById('m_method').value;
+
+    if(!email || !price) {
+        showToast('Please fill Email and Price', 'error');
+        return;
+    }
+
+    const prod = getProds().find(p => String(p.id) === String(prodId)) || { name: "Manual Invoice Service", cat: "Custom", type: "software" };
+    
+    const orderData = {
+        id: 'MAN-' + Date.now(),
+        invoiceNumber: 'INV-' + Math.floor(100000 + Math.random() * 900000),
+        date: new Date().toISOString(),
+        product: prod.name,
+        category: prod.cat || "Custom",
+        type: prod.type || "software",
+        price: parseFloat(price).toFixed(2),
+        priceDisplay: '$' + parseFloat(price).toFixed(2),
+        customerEmail: email,
+        payerName: name,
+        paymentMethod: method,
+        status: 'Completed',
+        currency: 'USD',
+        period: prod.period || 'Manual'
+    };
+
+    // 1. Sync to Firebase for QR validity
+    if(window.fbAddManualOrder) {
+        showToast('Saving to Firebase...', 'success');
+        await window.fbAddManualOrder(orderData);
+    }
+
+    // 2. Save Locally
+    const orders = getOrders();
+    orders.unshift(orderData);
+    setOrders(orders);
+
+    closeManualInvoiceModal();
+    renderOrderStats();
+    renderOrdersTable();
+    
+    const invUrl = window.location.origin + '/invoice.html?orderId=' + orderData.id + '&invoice=' + orderData.invoiceNumber + '&name=' + encodeURIComponent(name || email) + '&email=' + email + '&product=' + encodeURIComponent(prod.name) + '&price=' + price + '&currency=USD&method=' + encodeURIComponent(method) + '&status=Completed';
+
+    if(confirm('✅ Invoice Generated!\n\nClick OK to View/Print QR Invoice\nClick Cancel to Copy Link only.')) {
+        window.open(invUrl, '_blank');
+    } else {
+        navigator.clipboard.writeText(invUrl);
+        showToast('Invoice link copied!', 'success');
+    }
 }
 
 // ── PRODUCTS ──────────────────────────────────────────────
@@ -1035,9 +1140,9 @@ function showToast(msg,type='success'){
 // ── CLOSE MODALS ───────────────────────────────────────────
 document.getElementById('prodModal').addEventListener('click',e=>{if(e.target.id==='prodModal')closeProdModal();});
 document.getElementById('statusModal').addEventListener('click',e=>{if(e.target.id==='statusModal')document.getElementById('statusModal').classList.remove('open');});
+document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.target.id==='manualInvoiceModal')closeManualInvoiceModal();});
 </script>
 
-<!-- ── FIREBASE MODULE (Admin CRUD + Settings Sync) ── -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import {
@@ -1062,6 +1167,7 @@ document.getElementById('statusModal').addEventListener('click',e=>{if(e.target.
     const db = getFirestore(app);
     const prodsCol = collection(db, "products");
     const settingsDoc = doc(db, "config", "settings");
+    const ordersCol = collection(db, "orders");
 
     // 🔥 LOAD SETTINGS FROM FIREBASE
     const settingsSnap = await getDoc(settingsDoc);
@@ -1115,6 +1221,20 @@ document.getElementById('statusModal').addEventListener('click',e=>{if(e.target.
     window.fbSaveSettings = async function(settingsData){
       await setDoc(settingsDoc, {...settingsData, updatedAt: serverTimestamp()}, {merge: true});
       console.log('✓ Settings synced to Firebase');
+    };
+
+    // 🔥 MANUAL ORDER SYNC
+    window.fbAddManualOrder = async function(orderData) {
+        try {
+            await addDoc(ordersCol, {
+                ...orderData,
+                createdAt: serverTimestamp()
+            });
+            return true;
+        } catch(e) {
+            console.error("Firebase Sync Error:", e);
+            return false;
+        }
     };
 
   } catch(e) {
