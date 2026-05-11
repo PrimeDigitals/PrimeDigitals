@@ -750,11 +750,15 @@ function validateBuyForm(){
   return true;
 }
 
-// ── SAVE ORDER ────────────────────────────────────────────
+// ── SAVE ORDER (MODIFIED: added invoiceNumber) ─────────────┐
 function saveOrderRecord(det,prod,inv,extra,method){
   const orders=getOrders();
+  // Generate unique invoice number for each order (local)
+  const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+  
   const order={
     id:det.id,
+    invoiceNumber: invoiceNumber,
     date:new Date().toISOString(),
     product:prod.name,
     category:prod.cat,
