@@ -686,7 +686,7 @@ function renderOrdersTable(){
   const tbody=document.getElementById('ordersTable');
   if(!tbody)return;
   if(filtered.length===0){
-    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found.</td><table>`;
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found.</td></tr>`;
     return;
   }
   tbody.innerHTML=filtered.map(o=>{
@@ -787,11 +787,20 @@ function renderInvoicesTable(){
 function createAdminInvoiceURL(order){
   const baseURL = 'https://primedigitals.github.io/invoice.html';
   const params=new URLSearchParams({
-    orderId:order.id, invoice:order.invoiceNumber, name:order.payerName||order.customerEmail,
-    email:order.customerEmail, product:order.product, price:order.priceUSD||order.price,
-    currency:order.currency||'USD', period:order.period, method:order.paymentMethod,
-    status:order.status, date:order.date, credEmail:order.activationEmail||'',
-    credPassword:order.accountPassword||'', credUsername:order.socialUsername||''
+    orderId:order.id,
+    invoice:order.invoiceNumber,
+    name:order.payerName||order.customerEmail,
+    email:order.customerEmail,
+    product:order.product,
+    price:order.priceUSD||order.price,
+    currency:order.currency||'USD',
+    period:order.period,
+    method:order.paymentMethod,
+    status:order.status,
+    date:order.date,
+    credEmail:order.activationEmail||'',
+    credPassword:order.accountPassword||'',
+    credUsername:order.socialUsername||''
   });
   return `${baseURL}?${params.toString()}`;
 }
@@ -862,15 +871,13 @@ function exportOrdersCSV(){
   showToast('CSV exported!','success');
 }
 
-// ── PDF INVOICE (MODIFIED: now opens online QR invoice) ──
+// ── PDF INVOICE (MODIFIED: opens online invoice with QR) ──
 function printInvoice(id){
   const orders=getOrders();
   const o=orders.find(x=>x.id===id);
   if(!o){showToast('Order not found','error');return;}
-  
-  // Open the online invoice page which contains the QR code
-  const invoiceUrl = createAdminInvoiceURL(o);
-  window.open(invoiceUrl, '_blank');
+  const invUrl = createAdminInvoiceURL(o);
+  window.open(invUrl, '_blank');
   showToast('Opening online invoice with QR code...', 'success');
 }
 
@@ -904,7 +911,6 @@ async function generateManualInvoice() {
 
     const prod = getProds().find(p => String(p.id) === String(prodId)) || { name: "Manual Invoice Service", cat: "Custom", type: "software" };
     
-    // Generate unique invoice number
     const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
     
     const orderData = {
