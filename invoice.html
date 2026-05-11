@@ -6,6 +6,7 @@
 <title>فاتورة إلكترونية - PrimeDigitals</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
+/* نفس الستايلات السابقة (لم تتغير) */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -740,13 +741,13 @@ function populateInvoice(data){
   
   document.getElementById('itemsBody').innerHTML = `
     <tr>
-      <td>
+      <tr>
         <div class="item-name">${data.product || 'منتج رقمي'}</div>
         <div class="item-desc">
           <span class="item-badge">${data.period || 'شهري'}</span>
           ${data.category || 'اشتراك رقمي'}
         </div>
-      </td>
+      </div>
       <td style="text-align:center;font-weight:600;">${data.period || 'شهري'}</td>
       <td style="text-align:center;font-weight:600;">${currency}</td>
       <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
@@ -778,10 +779,18 @@ function populateInvoice(data){
     }
   }
   
-  // Generate QR Code
-  const qrData = window.location.href;
-  new QRCode(document.getElementById('qrcode'), {
-    text: qrData,
+  // 🔥 IMPORTANT: QR Code generation using the current page URL
+  // This URL contains all necessary parameters (orderId, invoice, etc.)
+  const qrUrl = window.location.href;
+  console.log('QR URL:', qrUrl); // For debugging (check browser console)
+  
+  // Clear previous QR code if exists
+  const qrContainer = document.getElementById('qrcode');
+  qrContainer.innerHTML = '';
+  
+  // Generate new QR code
+  new QRCode(qrContainer, {
+    text: qrUrl,
     width: 200,
     height: 200,
     colorDark: '#09090F',
@@ -842,4 +851,4 @@ window.addEventListener('DOMContentLoaded', initInvoice);
 </script>
 
 </body>
-</html> 
+</html>
