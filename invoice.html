@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>فاتورة إلكترونية - PrimeDigitals</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
+<title>Electronic Invoice - PrimeDigitals</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
@@ -17,13 +18,13 @@
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:'Cairo',sans-serif;
+  font-family:'DM Sans',sans-serif;
   padding:20px;
-  line-height:1.6;
+  line-height:1.5;
   position:relative;
 }
 
-/* Verification Badge */
+/* Verification Badge (simplified) */
 .verification-badge{
   position:fixed;
   top:20px;
@@ -31,7 +32,7 @@ body{
   background:var(--bg2);
   border:2px solid var(--green);
   border-radius:12px;
-  padding:15px 25px;
+  padding:12px 20px;
   display:flex;
   align-items:center;
   gap:12px;
@@ -52,29 +53,22 @@ body{
   animation:pulse 1.5s infinite;
 }
 .badge-icon{
-  font-size:32px;
+  font-size:28px;
   line-height:1;
 }
 .badge-content h3{
   font-size:14px;
   font-weight:700;
-  margin-bottom:3px;
-  text-transform:uppercase;
-  letter-spacing:1px;
+  margin-bottom:2px;
+  letter-spacing:0;
 }
 .badge-content p{
-  font-size:12px;
+  font-size:11px;
   color:var(--muted);
 }
-.badge-verified{
-  color:var(--green);
-}
-.badge-pending{
-  color:var(--orange);
-}
-.badge-invalid{
-  color:var(--red);
-}
+.badge-verified{ color:var(--green); }
+.badge-pending{ color:var(--orange); }
+.badge-invalid{ color:var(--red); }
 
 @keyframes slideIn{
   from{transform:translateX(120%);opacity:0;}
@@ -96,7 +90,7 @@ body{
   box-shadow:0 10px 40px rgba(0,0,0,0.3);
 }
 
-/* Header with gradient */
+/* Header */
 .invoice-header{
   background:linear-gradient(135deg,#9A7835 0%,#C9A84C 50%,#E2C06A 100%);
   padding:40px 30px;
@@ -120,6 +114,7 @@ body{
   to{transform:rotate(360deg);}
 }
 .logo{
+  font-family:'Cormorant Garamond',serif;
   font-size:42px;
   font-weight:900;
   margin-bottom:8px;
@@ -132,12 +127,12 @@ body{
   opacity:0.9;
   position:relative;
   z-index:1;
-  font-weight:600;
+  font-weight:500;
 }
 .invoice-status{
   background:rgba(0,0,0,0.25);
   display:inline-block;
-  padding:10px 24px;
+  padding:8px 20px;
   border-radius:25px;
   margin-top:20px;
   font-weight:700;
@@ -181,7 +176,7 @@ body{
 }
 .meta-section p strong{
   color:var(--gold);
-  margin-left:8px;
+  margin-right:8px;
 }
 .invoice-number{
   font-size:22px;
@@ -206,7 +201,7 @@ body{
 }
 .items-table th{
   padding:15px;
-  text-align:right;
+  text-align:left;
   font-size:13px;
   text-transform:uppercase;
   letter-spacing:1.5px;
@@ -222,12 +217,12 @@ body{
 .item-name{
   font-weight:700;
   color:var(--text);
-  font-size:16px;
+  font-size:18px;
 }
 .item-desc{
   font-size:13px;
   color:var(--muted);
-  margin-top:5px;
+  margin-top:6px;
 }
 .item-badge{
   display:inline-block;
@@ -238,6 +233,24 @@ body{
   font-size:11px;
   font-weight:700;
   margin-right:8px;
+}
+.features-list{
+  margin-top:10px;
+  padding-left:20px;
+  list-style:none;
+}
+.features-list li{
+  font-size:12px;
+  color:var(--muted);
+  margin-bottom:4px;
+  position:relative;
+  padding-left:12px;
+}
+.features-list li::before{
+  content:'•';
+  color:var(--gold);
+  position:absolute;
+  left:0;
 }
 
 /* Credentials Box */
@@ -316,7 +329,7 @@ body{
   color:var(--gold);
 }
 
-/* QR Section (without explanatory text) */
+/* QR Section - only title and QR */
 .qr-section{
   text-align:center;
   padding:40px 30px;
@@ -337,7 +350,7 @@ body{
   box-shadow:0 4px 20px rgba(201,168,76,0.2);
 }
 
-/* Footer removed (contact info removed) */
+/* Footer - minimal */
 .invoice-footer{
   padding:25px 35px;
   background:var(--bg3);
@@ -349,9 +362,7 @@ body{
   font-weight:700;
   color:var(--gold);
   font-size:16px;
-  margin-bottom:10px;
 }
-/* No support-info section */
 
 /* Print Button */
 .print-btn{
@@ -363,7 +374,7 @@ body{
   border:none;
   padding:15px 30px;
   border-radius:50px;
-  font-family:'Cairo',sans-serif;
+  font-family:'DM Sans',sans-serif;
   font-weight:700;
   cursor:pointer;
   font-size:15px;
@@ -377,7 +388,6 @@ body{
 .print-btn:hover{
   background:var(--gl);
   transform:translateY(-3px);
-  box-shadow:0 8px 25px rgba(201,168,76,0.5);
 }
 
 /* Loading Spinner */
@@ -437,22 +447,22 @@ body{
 <!-- Loading Screen -->
 <div class="loading" id="loadingScreen">
   <div class="spinner"></div>
-  <div class="loading-text">جاري التحقق من الفاتورة...</div>
+  <div class="loading-text">Verifying invoice...</div>
 </div>
 
 <!-- Verification Badge -->
 <div class="verification-badge loading" id="verifyBadge">
   <div class="badge-icon">⏳</div>
   <div class="badge-content">
-    <h3 id="badgeTitle">جاري التحقق...</h3>
-    <p id="badgeSubtitle">يرجى الانتظار</p>
+    <h3 id="badgeTitle">Verifying...</h3>
+    <p id="badgeSubtitle">Please wait</p>
   </div>
 </div>
 
 <!-- Print Button -->
 <button class="print-btn" onclick="window.print()">
   <span>🖨️</span>
-  <span>طباعة الفاتورة</span>
+  <span>Print Invoice</span>
 </button>
 
 <!-- Invoice Container -->
@@ -460,8 +470,8 @@ body{
   <!-- Header -->
   <div class="invoice-header">
     <div class="logo">PrimeDigitals</div>
-    <div class="tagline">منصتك الموثوقة للاشتراكات الرقمية</div>
-    <div class="invoice-status" id="statusBadge">✓ فاتورة مدفوعة</div>
+    <div class="tagline">Your trusted digital marketplace</div>
+    <div class="invoice-status" id="statusBadge">✓ Paid Invoice</div>
   </div>
 
   <!-- Body -->
@@ -469,18 +479,18 @@ body{
     <!-- Meta Info -->
     <div class="invoice-meta">
       <div class="meta-section">
-        <h3>📄 معلومات الفاتورة</h3>
+        <h3>📄 Invoice Information</h3>
         <p class="invoice-number" id="invoiceNumber">INV-000000</p>
-        <p><strong>التاريخ:</strong> <span id="invoiceDate"></span></p>
-        <p><strong>طريقة الدفع:</strong> <span id="paymentMethod"></span></p>
-        <p><strong>الحالة:</strong> <span id="invoiceStatus"></span></p>
+        <p><strong>Date:</strong> <span id="invoiceDate"></span></p>
+        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
+        <p><strong>Status:</strong> <span id="invoiceStatus"></span></p>
       </div>
       
       <div class="meta-section">
-        <h3>👤 معلومات العميل</h3>
-        <p><strong>الاسم:</strong> <span id="customerName"></span></p>
-        <p><strong>البريد:</strong> <span id="customerEmail"></span></p>
-        <p><strong>رقم الطلب:</strong> <span id="orderId"></span></p>
+        <h3>👤 Customer Information</h3>
+        <p><strong>Name:</strong> <span id="customerName"></span></p>
+        <p><strong>Email:</strong> <span id="customerEmail"></span></p>
+        <p><strong>Order ID:</strong> <span id="orderId"></span></p>
       </div>
     </div>
 
@@ -488,10 +498,10 @@ body{
     <table class="items-table">
       <thead>
         <tr>
-          <th>المنتج</th>
-          <th style="text-align:center;width:120px;">الفترة</th>
-          <th style="text-align:center;width:100px;">العملة</th>
-          <th style="text-align:left;width:130px;">السعر</th>
+          <th>Product / Service</th>
+          <th style="text-align:center;width:120px;">Period</th>
+          <th style="text-align:center;width:100px;">Currency</th>
+          <th style="text-align:right;width:130px;">Amount</th>
         </tr>
       </thead>
       <tbody id="itemsBody"></tbody>
@@ -499,61 +509,57 @@ body{
 
     <!-- Credentials (if available) -->
     <div class="credentials-box" id="credentialsBox" style="display:none;">
-      <h3>🔐 بيانات الوصول السرية</h3>
+      <h3>🔐 Access Credentials</h3>
       <div class="credential-item">
-        <span class="credential-label">البريد الإلكتروني</span>
+        <span class="credential-label">Email</span>
         <span class="credential-value" id="credEmail">-</span>
       </div>
       <div class="credential-item">
-        <span class="credential-label">كلمة المرور</span>
+        <span class="credential-label">Password</span>
         <span class="credential-value" id="credPassword">-</span>
       </div>
       <div class="credential-item" id="credUsernameRow" style="display:none;">
-        <span class="credential-label">اسم المستخدم</span>
+        <span class="credential-label">Username</span>
         <span class="credential-value" id="credUsername">-</span>
       </div>
       <div class="credentials-warning">
         <span>⚠️</span>
-        <span>يرجى حفظ هذه البيانات في مكان آمن. لن تتمكن من استرجاعها لاحقاً.</span>
+        <span>Please save these credentials. They will not be shown again.</span>
       </div>
     </div>
 
     <!-- Totals -->
     <div class="totals">
       <div class="total-row">
-        <span>المجموع الفرعي:</span>
+        <span>Subtotal:</span>
         <span id="subtotal">$0.00</span>
       </div>
       <div class="total-row">
-        <span>الخصم:</span>
+        <span>Discount:</span>
         <span id="discount" style="color:var(--green);">$0.00</span>
       </div>
       <div class="total-row final">
-        <span>الإجمالي المدفوع:</span>
+        <span>Total Paid:</span>
         <span id="grandTotal">$0.00</span>
       </div>
     </div>
   </div>
 
-  <!-- QR Code Section (without text) -->
+  <!-- QR Code Section (no extra text) -->
   <div class="qr-section">
-    <h3>📱 رمز التحقق السريع (QR Code)</h3>
+    <h3>📱 QR Verification Code</h3>
     <div id="qrcode"></div>
-    <!-- تم حذف النص التوضيحي -->
   </div>
 
-  <!-- Footer (company name only) -->
+  <!-- Footer (minimal) -->
   <div class="invoice-footer">
     <p class="company-name">PrimeDigitals</p>
-    <p style="margin:10px 0;">شكراً لثقتك في خدماتنا</p>
+    <p style="margin:10px 0;">Thank you for trusting our services</p>
     <p style="margin-top:25px;font-size:11px;opacity:0.7;">
-      © 2026 PrimeDigitals. جميع الحقوق محفوظة.
+      © 2026 PrimeDigitals. All rights reserved.
     </p>
   </div>
 </div>
-
-<!-- QR Code Library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
 <!-- Firebase SDK -->
 <script type="module">
@@ -580,13 +586,7 @@ window.fbCollection = collection;
 </script>
 
 <script>
-// ═══════════════════════════════════════════════════════════════
-//  📄 INVOICE VERIFICATION & DISPLAY SYSTEM
-// ═══════════════════════════════════════════════════════════════
-
-let invoiceData = null;
-
-// ── Get URL Parameters ─────────────────────────────────────────
+// ── Helper: get URL params ─────────────────────────────────
 function getUrlParams(){
   const params = new URLSearchParams(window.location.search);
   return {
@@ -600,80 +600,59 @@ function getUrlParams(){
     period: params.get('period') || 'Monthly',
     paymentMethod: params.get('method') || 'PayPal',
     status: params.get('status') || 'Completed',
-    date: params.get('date') || null,      // if not provided, will use today
+    date: params.get('date') || null,
     credEmail: params.get('credEmail') || '',
     credPassword: params.get('credPassword') || '',
     credUsername: params.get('credUsername') || '',
     category: params.get('category') || '',
-    // extra fields for product details (can be extended)
-    features: params.get('features') || '',
-    description: params.get('description') || ''
+    description: params.get('description') || '',
+    features: params.get('features') || ''
   };
 }
 
-// ── Verify Invoice from Firebase ───────────────────────────────
+// ── Firebase verification (simplified badge) ──────────────
 async function verifyInvoiceFromFirebase(orderId, invoiceNumber){
   try {
     if(!window.fbDB) throw new Error('Firebase not initialized');
-    
     const ordersRef = window.fbCollection(window.fbDB, 'orders');
-    const q = window.fbQuery(
-      ordersRef,
-      window.fbWhere('id', '==', orderId),
-      window.fbWhere('invoiceNumber', '==', invoiceNumber)
-    );
-    
+    const q = window.fbQuery(ordersRef, window.fbWhere('id', '==', orderId), window.fbWhere('invoiceNumber', '==', invoiceNumber));
     const snapshot = await window.fbGetDocs(q);
-    
-    if(snapshot.empty){
-      return { verified: false, message: 'الفاتورة غير موجودة' };
-    }
-    
+    if(snapshot.empty) return { verified: false, message: 'Invoice not found' };
     const orderDoc = snapshot.docs[0].data();
-    
-    return {
-      verified: true,
-      message: 'فاتورة موثقة',
-      data: orderDoc
-    };
-    
+    return { verified: true, message: 'Verified Invoice', data: orderDoc };
   } catch(error) {
     console.error('Firebase verification error:', error);
-    return { verified: 'unknown', message: '' }; // no message shown
+    return { verified: 'unknown', message: '' };
   }
 }
 
-// ── Update Verification Badge (simplified) ─────────────────────
 function updateVerificationBadge(status, title, subtitle){
   const badge = document.getElementById('verifyBadge');
   const badgeTitle = document.getElementById('badgeTitle');
   const badgeSubtitle = document.getElementById('badgeSubtitle');
   const icon = badge.querySelector('.badge-icon');
-  
   badge.className = 'verification-badge ' + status;
-  
   if(status === 'verified'){
-    badgeTitle.textContent = 'فاتورة موثقة ✓';
+    badgeTitle.textContent = 'Verified Invoice ✓';
     badgeSubtitle.textContent = '';
     icon.textContent = '✅';
     badgeTitle.className = 'badge-verified';
   } else if(status === 'pending'){
-    badgeTitle.textContent = 'فاتورة مدفوعة';
+    badgeTitle.textContent = 'Paid Invoice';
     badgeSubtitle.textContent = '';
     icon.textContent = '💰';
     badgeTitle.className = 'badge-pending';
   } else if(status === 'invalid'){
-    badgeTitle.textContent = 'فاتورة غير صالحة';
+    badgeTitle.textContent = 'Invalid Invoice';
     badgeSubtitle.textContent = '';
     icon.textContent = '❌';
     badgeTitle.className = 'badge-invalid';
   } else {
-    badgeTitle.textContent = title || 'فاتورة';
+    badgeTitle.textContent = title || 'Invoice';
     badgeSubtitle.textContent = subtitle || '';
   }
 }
 
-// ── Format Date (optional: use provided date or today) ─────────
 function formatDisplayDate(dateParam){
   let d;
   if(dateParam){
@@ -682,99 +661,79 @@ function formatDisplayDate(dateParam){
   } else {
     d = new Date();
   }
-  return d.toLocaleDateString('ar-EG', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
-// ── Populate Invoice Display ───────────────────────────────────
 function populateInvoice(data){
-  invoiceData = data;
-  
-  // Invoice Number
   document.getElementById('invoiceNumber').textContent = data.invoiceNumber || 'N/A';
-  
-  // Date (optional from URL or today)
   document.getElementById('invoiceDate').textContent = formatDisplayDate(data.date);
-  
-  // Payment Info
   document.getElementById('paymentMethod').textContent = data.paymentMethod || 'N/A';
-  let statusText = '';
-  if(data.status === 'Completed') statusText = 'مدفوعة ✓';
-  else if(data.status === 'Pending') statusText = 'قيد المراجعة';
-  else statusText = data.status || 'مدفوعة';
+  let statusText = data.status === 'Completed' ? 'Paid ✓' : (data.status === 'Pending' ? 'Pending Review' : data.status);
   document.getElementById('invoiceStatus').textContent = statusText;
-  
-  // Customer Info
-  document.getElementById('customerName').textContent = data.customerName || data.payerName || 'عميل';
+  document.getElementById('customerName').textContent = data.customerName || data.payerName || 'Customer';
   document.getElementById('customerEmail').textContent = data.customerEmail || '';
-  document.getElementById('orderId').textContent = (data.orderId || data.id || '').substring(0, 8).toUpperCase();
+  document.getElementById('orderId').textContent = (data.orderId || data.id || '').substring(0,8).toUpperCase();
   
-  // Status Badge in header
   const statusBadge = document.getElementById('statusBadge');
   if(data.status === 'Completed'){
-    statusBadge.textContent = '✓ فاتورة مدفوعة';
+    statusBadge.textContent = '✓ Paid Invoice';
     statusBadge.style.background = 'rgba(93,235,122,0.3)';
   } else if(data.status === 'Pending'){
-    statusBadge.textContent = '⏳ قيد المراجعة';
+    statusBadge.textContent = '⏳ Pending Review';
     statusBadge.style.background = 'rgba(255,179,71,0.3)';
   } else {
-    statusBadge.textContent = 'فاتورة موثقة';
+    statusBadge.textContent = 'Verified Invoice';
     statusBadge.style.background = 'rgba(201,168,76,0.3)';
   }
   
-  // Items Table - show product details
   const priceNum = parseFloat(data.price || data.priceUSD || 0);
   const currency = data.currency || 'USD';
-  const periodText = data.period || 'شهري';
-  const categoryText = data.category || (data.type === 'social' ? 'وسائل التواصل' : (data.type === 'ai' ? 'أدوات ذكاء اصطناعي' : 'اشتراك برمجي'));
+  const periodText = data.period || 'Monthly';
+  const categoryText = data.category || (data.type === 'social' ? 'Social Media' : (data.type === 'ai' ? 'AI Tools' : 'Digital Subscription'));
   
-  // Build product description line (features if any)
-  let descHTML = `<span class="item-badge">${periodText}</span> ${categoryText}`;
+  let featuresHtml = '';
   if(data.features){
-    descHTML += `<br><span style="font-size:12px;color:var(--muted);">${data.features.substring(0,100)}</span>`;
+    const featuresArray = data.features.split('||');
+    if(featuresArray.length > 0 && featuresArray[0] !== ''){
+      featuresHtml = `<ul class="features-list">${featuresArray.map(f => `<li>${f}</li>`).join('')}</ul>`;
+    }
   }
+  let descriptionHtml = data.description ? `<div style="margin-top:8px;color:var(--muted);font-size:13px;">${data.description}</div>` : '';
   
   document.getElementById('itemsBody').innerHTML = `
     <tr>
       <td>
-        <div class="item-name">${data.product || 'منتج رقمي'}</div>
-        <div class="item-desc">${descHTML}</div>
-      </div>
+        <div class="item-name">${data.product || 'Digital Product'}</div>
+        <div class="item-desc">
+          <span class="item-badge">${periodText}</span> ${categoryText}
+          ${descriptionHtml}
+          ${featuresHtml}
+        </div>
+      </td>
       <td style="text-align:center;font-weight:600;">${periodText}</td>
       <td style="text-align:center;font-weight:600;">${currency}</td>
-      <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
+      <td style="text-align:right;font-weight:900;color:var(--gold);font-size:18px;">
         ${priceNum.toFixed(2)}
       </td>
     </tr>
   `;
   
-  // Totals
   const priceDisplay = `${currency} ${priceNum.toFixed(2)}`;
   document.getElementById('subtotal').textContent = priceDisplay;
   document.getElementById('discount').textContent = `${currency} 0.00`;
   document.getElementById('grandTotal').textContent = priceDisplay;
   
-  // Credentials (if available)
   if(data.credEmail || data.activationEmail || data.credPassword || data.accountPassword){
     const credBox = document.getElementById('credentialsBox');
     credBox.style.display = 'block';
-    
-    if(data.credEmail || data.activationEmail){
-      document.getElementById('credEmail').textContent = data.credEmail || data.activationEmail;
-    }
-    if(data.credPassword || data.accountPassword){
-      document.getElementById('credPassword').textContent = data.credPassword || data.accountPassword;
-    }
+    document.getElementById('credEmail').textContent = data.credEmail || data.activationEmail || '-';
+    document.getElementById('credPassword').textContent = data.credPassword || data.accountPassword || '-';
     if(data.credUsername || data.socialUsername){
       document.getElementById('credUsernameRow').style.display = 'flex';
       document.getElementById('credUsername').textContent = data.credUsername || data.socialUsername;
     }
   }
   
-  // Generate QR Code using current page URL
   const qrUrl = window.location.href;
   const qrContainer = document.getElementById('qrcode');
   qrContainer.innerHTML = '';
@@ -788,49 +747,41 @@ function populateInvoice(data){
   });
 }
 
-// ── Main Initialization ────────────────────────────────────────
 async function initInvoice(){
   const params = getUrlParams();
-  
-  document.querySelector('.loading-text').textContent = 'جاري التحقق من الفاتورة...';
-  
+  document.querySelector('.loading-text').textContent = 'Verifying invoice...';
   if(!params.orderId && !params.invoiceNumber){
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
-      updateVerificationBadge('invalid', 'فاتورة غير صالحة', 'بيانات غير كاملة');
+      updateVerificationBadge('invalid', 'Invalid Invoice', 'Missing data');
     }, 1000);
     return;
   }
-  
   try {
     const verification = await verifyInvoiceFromFirebase(params.orderId, params.invoiceNumber);
-    
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
-      
       if(verification.verified === true){
         updateVerificationBadge('verified', '', '');
         populateInvoice(verification.data);
       } else if(verification.verified === false){
-        updateVerificationBadge('pending', 'فاتورة مدفوعة', '');
+        updateVerificationBadge('pending', 'Paid Invoice', '');
         populateInvoice(params);
       } else {
-        updateVerificationBadge('pending', 'فاتورة مدفوعة', '');
+        updateVerificationBadge('pending', 'Paid Invoice', '');
         populateInvoice(params);
       }
     }, 1500);
-    
   } catch(error) {
-    console.error('Initialization error:', error);
+    console.error(error);
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
-      updateVerificationBadge('invalid', 'خطأ في التحميل', error.message);
+      updateVerificationBadge('invalid', 'Error', error.message);
     }, 1000);
   }
 }
 
 window.addEventListener('DOMContentLoaded', initInvoice);
 </script>
-
 </body>
 </html>
