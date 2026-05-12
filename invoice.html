@@ -316,7 +316,7 @@ body{
   color:var(--gold);
 }
 
-/* QR Section */
+/* QR Section (without explanatory text) */
 .qr-section{
   text-align:center;
   padding:40px 30px;
@@ -336,14 +336,8 @@ body{
   margin:15px 0;
   box-shadow:0 4px 20px rgba(201,168,76,0.2);
 }
-.qr-note{
-  font-size:13px;
-  color:var(--muted);
-  margin-top:15px;
-  line-height:1.8;
-}
 
-/* Footer */
+/* Footer removed (contact info removed) */
 .invoice-footer{
   padding:25px 35px;
   background:var(--bg3);
@@ -355,21 +349,9 @@ body{
   font-weight:700;
   color:var(--gold);
   font-size:16px;
+  margin-bottom:10px;
 }
-.support-info{
-  margin-top:20px;
-  padding-top:20px;
-  border-top:1px solid var(--border);
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
-  gap:15px;
-}
-.support-item{
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-}
+/* No support-info section */
 
 /* Print Button */
 .print-btn{
@@ -553,36 +535,17 @@ body{
     </div>
   </div>
 
-  <!-- QR Code Section -->
+  <!-- QR Code Section (without text) -->
   <div class="qr-section">
     <h3>📱 رمز التحقق السريع (QR Code)</h3>
     <div id="qrcode"></div>
-    <p class="qr-note">
-      امسح هذا الرمز بكاميرا الهاتف للتحقق من صحة الفاتورة في أي وقت<br>
-      يمكن لمديري الشركات استخدام هذا الرمز للتأكد من صحة الفاتورة
-    </p>
+    <!-- تم حذف النص التوضيحي -->
   </div>
 
-  <!-- Footer -->
+  <!-- Footer (company name only) -->
   <div class="invoice-footer">
     <p class="company-name">PrimeDigitals</p>
     <p style="margin:10px 0;">شكراً لثقتك في خدماتنا</p>
-    
-    <div class="support-info">
-      <div class="support-item">
-        <span>📧</span>
-        <span>support@primedigitals.com</span>
-      </div>
-      <div class="support-item">
-        <span>💬</span>
-        <span>واتساب: متاح 24/7</span>
-      </div>
-      <div class="support-item">
-        <span>🌐</span>
-        <span>www.primedigitals.com</span>
-      </div>
-    </div>
-    
     <p style="margin-top:25px;font-size:11px;opacity:0.7;">
       © 2026 PrimeDigitals. جميع الحقوق محفوظة.
     </p>
@@ -609,7 +572,6 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// Make db available globally
 window.fbDB = db;
 window.fbQuery = query;
 window.fbWhere = where;
@@ -638,10 +600,14 @@ function getUrlParams(){
     period: params.get('period') || 'Monthly',
     paymentMethod: params.get('method') || 'PayPal',
     status: params.get('status') || 'Completed',
-    date: params.get('date') || new Date().toISOString(),
+    date: params.get('date') || null,      // if not provided, will use today
     credEmail: params.get('credEmail') || '',
     credPassword: params.get('credPassword') || '',
-    credUsername: params.get('credUsername') || ''
+    credUsername: params.get('credUsername') || '',
+    category: params.get('category') || '',
+    // extra fields for product details (can be extended)
+    features: params.get('features') || '',
+    description: params.get('description') || ''
   };
 }
 
@@ -673,11 +639,11 @@ async function verifyInvoiceFromFirebase(orderId, invoiceNumber){
     
   } catch(error) {
     console.error('Firebase verification error:', error);
-    return { verified: 'unknown', message: 'فشل التحقق من Firebase' };
+    return { verified: 'unknown', message: '' }; // no message shown
   }
 }
 
-// ── Update Verification Badge ──────────────────────────────────
+// ── Update Verification Badge (simplified) ─────────────────────
 function updateVerificationBadge(status, title, subtitle){
   const badge = document.getElementById('verifyBadge');
   const badgeTitle = document.getElementById('badgeTitle');
@@ -685,46 +651,68 @@ function updateVerificationBadge(status, title, subtitle){
   const icon = badge.querySelector('.badge-icon');
   
   badge.className = 'verification-badge ' + status;
-  badgeTitle.textContent = title;
-  badgeSubtitle.textContent = subtitle;
   
   if(status === 'verified'){
-    badgeTitle.className = 'badge-verified';
+    badgeTitle.textContent = 'فاتورة موثقة ✓';
+    badgeSubtitle.textContent = '';
     icon.textContent = '✅';
+    badgeTitle.className = 'badge-verified';
   } else if(status === 'pending'){
+    badgeTitle.textContent = 'فاتورة مدفوعة';
+    badgeSubtitle.textContent = '';
+    icon.textContent = '💰';
     badgeTitle.className = 'badge-pending';
-    icon.textContent = '⏳';
   } else if(status === 'invalid'){
-    badgeTitle.className = 'badge-invalid';
+    badgeTitle.textContent = 'فاتورة غير صالحة';
+    badgeSubtitle.textContent = '';
     icon.textContent = '❌';
+    badgeTitle.className = 'badge-invalid';
+  } else {
+    badgeTitle.textContent = title || 'فاتورة';
+    badgeSubtitle.textContent = subtitle || '';
   }
+}
+
+// ── Format Date (optional: use provided date or today) ─────────
+function formatDisplayDate(dateParam){
+  let d;
+  if(dateParam){
+    d = new Date(dateParam);
+    if(isNaN(d.getTime())) d = new Date();
+  } else {
+    d = new Date();
+  }
+  return d.toLocaleDateString('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
 }
 
 // ── Populate Invoice Display ───────────────────────────────────
 function populateInvoice(data){
   invoiceData = data;
   
-  // Invoice Number & Date
+  // Invoice Number
   document.getElementById('invoiceNumber').textContent = data.invoiceNumber || 'N/A';
-  document.getElementById('invoiceDate').textContent = new Date(data.date).toLocaleDateString('ar-EG', {
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
-  });
+  
+  // Date (optional from URL or today)
+  document.getElementById('invoiceDate').textContent = formatDisplayDate(data.date);
   
   // Payment Info
   document.getElementById('paymentMethod').textContent = data.paymentMethod || 'N/A';
-  document.getElementById('invoiceStatus').textContent = 
-    data.status === 'Completed' ? 'مدفوعة ✓' : 
-    data.status === 'Pending' ? 'قيد المراجعة' : 
-    data.status;
+  let statusText = '';
+  if(data.status === 'Completed') statusText = 'مدفوعة ✓';
+  else if(data.status === 'Pending') statusText = 'قيد المراجعة';
+  else statusText = data.status || 'مدفوعة';
+  document.getElementById('invoiceStatus').textContent = statusText;
   
   // Customer Info
   document.getElementById('customerName').textContent = data.customerName || data.payerName || 'عميل';
   document.getElementById('customerEmail').textContent = data.customerEmail || '';
   document.getElementById('orderId').textContent = (data.orderId || data.id || '').substring(0, 8).toUpperCase();
   
-  // Status Badge
+  // Status Badge in header
   const statusBadge = document.getElementById('statusBadge');
   if(data.status === 'Completed'){
     statusBadge.textContent = '✓ فاتورة مدفوعة';
@@ -732,26 +720,34 @@ function populateInvoice(data){
   } else if(data.status === 'Pending'){
     statusBadge.textContent = '⏳ قيد المراجعة';
     statusBadge.style.background = 'rgba(255,179,71,0.3)';
+  } else {
+    statusBadge.textContent = 'فاتورة موثقة';
+    statusBadge.style.background = 'rgba(201,168,76,0.3)';
   }
   
-  // Items Table
+  // Items Table - show product details
   const priceNum = parseFloat(data.price || data.priceUSD || 0);
   const currency = data.currency || 'USD';
+  const periodText = data.period || 'شهري';
+  const categoryText = data.category || (data.type === 'social' ? 'وسائل التواصل' : (data.type === 'ai' ? 'أدوات ذكاء اصطناعي' : 'اشتراك برمجي'));
+  
+  // Build product description line (features if any)
+  let descHTML = `<span class="item-badge">${periodText}</span> ${categoryText}`;
+  if(data.features){
+    descHTML += `<br><span style="font-size:12px;color:var(--muted);">${data.features.substring(0,100)}</span>`;
+  }
   
   document.getElementById('itemsBody').innerHTML = `
     <tr>
       <td>
         <div class="item-name">${data.product || 'منتج رقمي'}</div>
-        <div class="item-desc">
-          <span class="item-badge">${data.period || 'شهري'}</span>
-          ${data.category || 'اشتراك رقمي'}
-        </div>
+        <div class="item-desc">${descHTML}</div>
       </div>
-      <td style="text-align:center;font-weight:600;">${data.period || 'شهري'}</td>
+      <td style="text-align:center;font-weight:600;">${periodText}</td>
       <td style="text-align:center;font-weight:600;">${currency}</td>
       <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
         ${priceNum.toFixed(2)}
-      </div>
+      </td>
     </tr>
   `;
   
@@ -778,7 +774,7 @@ function populateInvoice(data){
     }
   }
   
-  // Generate QR Code using the current page URL
+  // Generate QR Code using current page URL
   const qrUrl = window.location.href;
   const qrContainer = document.getElementById('qrcode');
   qrContainer.innerHTML = '';
@@ -813,13 +809,13 @@ async function initInvoice(){
       document.getElementById('loadingScreen').style.display = 'none';
       
       if(verification.verified === true){
-        updateVerificationBadge('verified', 'فاتورة موثقة ✓', 'تم التحقق من Firebase');
+        updateVerificationBadge('verified', '', '');
         populateInvoice(verification.data);
       } else if(verification.verified === false){
-        updateVerificationBadge('pending', 'فاتورة محلية', 'لم يتم التحقق من Firebase');
+        updateVerificationBadge('pending', 'فاتورة مدفوعة', '');
         populateInvoice(params);
       } else {
-        updateVerificationBadge('pending', 'فاتورة محلية', 'تحقق محلي فقط');
+        updateVerificationBadge('pending', 'فاتورة مدفوعة', '');
         populateInvoice(params);
       }
     }, 1500);
