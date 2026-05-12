@@ -6,7 +6,6 @@
 <title>Admin Panel — PrimeDigitals</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
-/* جميع الستايلات كما هي (لم تتغير) */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -785,9 +784,9 @@ function renderInvoicesTable(){
   });
 }
 
-// 🔥 FIXED: using ABSOLUTE URL
+// 🔥 FIXED: using correct subfolder path
 function createAdminInvoiceURL(order){
-  const baseURL = 'https://primedigitals.github.io/PrimeDigitals/invoice.html';
+  const baseURL = '/PrimeDigitals/invoice.html';
   const params = new URLSearchParams({
     orderId: order.id,
     invoice: order.invoiceNumber,
@@ -1002,7 +1001,7 @@ function renderProdsTable(){
         <button class="btn-sm btn-outline" onclick="openEditProd('${x.id}')">Edit</button>
         <button class="btn-sm btn-danger" onclick="deleteProd('${x.id}')">Delete</button>
       </div></td>
-    </tr>
+    </table>
   `).join('');
 }
 
