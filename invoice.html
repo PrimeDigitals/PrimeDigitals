@@ -6,7 +6,6 @@
 <title>فاتورة إلكترونية - PrimeDigitals</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
-/* جميع الستايلات كما هي بدون تغيير */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -23,11 +22,819 @@ body{
   line-height:1.6;
   position:relative;
 }
-/* باقي الستايلات كما في الملف الأصلي (لم تتغير) */
-/* ... (لن أعيد كتابتها كلها هنا للاختصار، لكنها موجودة في الملف الذي أرسلته سابقاً) ... */
+
+/* Verification Badge */
+.verification-badge{
+  position:fixed;
+  top:20px;
+  right:20px;
+  background:var(--bg2);
+  border:2px solid var(--green);
+  border-radius:12px;
+  padding:15px 25px;
+  display:flex;
+  align-items:center;
+  gap:12px;
+  box-shadow:0 8px 24px rgba(93,235,122,0.2);
+  animation:slideIn 0.5s ease-out;
+  z-index:1000;
+}
+.verification-badge.pending{
+  border-color:var(--orange);
+  box-shadow:0 8px 24px rgba(255,179,71,0.2);
+}
+.verification-badge.invalid{
+  border-color:var(--red);
+  box-shadow:0 8px 24px rgba(255,107,107,0.2);
+}
+.verification-badge.loading{
+  border-color:var(--muted);
+  animation:pulse 1.5s infinite;
+}
+.badge-icon{
+  font-size:32px;
+  line-height:1;
+}
+.badge-content h3{
+  font-size:14px;
+  font-weight:700;
+  margin-bottom:3px;
+  text-transform:uppercase;
+  letter-spacing:1px;
+}
+.badge-content p{
+  font-size:12px;
+  color:var(--muted);
+}
+.badge-verified{
+  color:var(--green);
+}
+.badge-pending{
+  color:var(--orange);
+}
+.badge-invalid{
+  color:var(--red);
+}
+
+@keyframes slideIn{
+  from{transform:translateX(120%);opacity:0;}
+  to{transform:translateX(0);opacity:1;}
+}
+@keyframes pulse{
+  0%,100%{opacity:1;}
+  50%{opacity:0.5;}
+}
+
+/* Invoice Container */
+.invoice-container{
+  max-width:900px;
+  margin:0 auto;
+  background:var(--bg2);
+  border:2px solid var(--borderh);
+  border-radius:16px;
+  overflow:hidden;
+  box-shadow:0 10px 40px rgba(0,0,0,0.3);
+}
+
+/* Header with gradient */
+.invoice-header{
+  background:linear-gradient(135deg,#9A7835 0%,#C9A84C 50%,#E2C06A 100%);
+  padding:40px 30px;
+  text-align:center;
+  color:#09090F;
+  position:relative;
+  overflow:hidden;
+}
+.invoice-header::before{
+  content:'';
+  position:absolute;
+  top:-50%;
+  right:-50%;
+  width:200%;
+  height:200%;
+  background:radial-gradient(circle,rgba(255,255,255,0.1) 0%,transparent 70%);
+  animation:rotate 20s linear infinite;
+}
+@keyframes rotate{
+  from{transform:rotate(0deg);}
+  to{transform:rotate(360deg);}
+}
+.logo{
+  font-size:42px;
+  font-weight:900;
+  margin-bottom:8px;
+  position:relative;
+  z-index:1;
+  text-shadow:2px 2px 4px rgba(0,0,0,0.2);
+}
+.tagline{
+  font-size:15px;
+  opacity:0.9;
+  position:relative;
+  z-index:1;
+  font-weight:600;
+}
+.invoice-status{
+  background:rgba(0,0,0,0.25);
+  display:inline-block;
+  padding:10px 24px;
+  border-radius:25px;
+  margin-top:20px;
+  font-weight:700;
+  font-size:14px;
+  position:relative;
+  z-index:1;
+  backdrop-filter:blur(10px);
+}
+
+/* Body */
+.invoice-body{
+  padding:35px;
+}
+
+/* Meta Grid */
+.invoice-meta{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:25px;
+  margin-bottom:35px;
+  padding-bottom:25px;
+  border-bottom:2px solid var(--border);
+}
+.meta-section{
+  background:var(--bg3);
+  padding:20px;
+  border-radius:10px;
+  border:1px solid var(--border);
+}
+.meta-section h3{
+  font-size:11px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  color:var(--muted);
+  margin-bottom:12px;
+  font-weight:700;
+}
+.meta-section p{
+  margin:8px 0;
+  font-size:14px;
+}
+.meta-section p strong{
+  color:var(--gold);
+  margin-left:8px;
+}
+.invoice-number{
+  font-size:22px;
+  font-weight:900;
+  color:var(--gold);
+  font-family:monospace;
+  letter-spacing:1px;
+}
+
+/* Items Table */
+.items-table{
+  width:100%;
+  border-collapse:collapse;
+  margin:25px 0;
+  background:var(--bg3);
+  border-radius:10px;
+  overflow:hidden;
+}
+.items-table thead{
+  background:linear-gradient(135deg,var(--gd),var(--gold));
+  color:#09090F;
+}
+.items-table th{
+  padding:15px;
+  text-align:right;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
+  font-weight:700;
+}
+.items-table td{
+  padding:18px 15px;
+  border-bottom:1px solid var(--border);
+}
+.items-table tr:last-child td{
+  border-bottom:none;
+}
+.item-name{
+  font-weight:700;
+  color:var(--text);
+  font-size:16px;
+}
+.item-desc{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:5px;
+}
+.item-badge{
+  display:inline-block;
+  padding:4px 10px;
+  background:rgba(201,168,76,0.15);
+  color:var(--gold);
+  border-radius:4px;
+  font-size:11px;
+  font-weight:700;
+  margin-right:8px;
+}
+
+/* Credentials Box */
+.credentials-box{
+  background:linear-gradient(135deg,rgba(201,168,76,0.08),rgba(201,168,76,0.03));
+  border:2px solid var(--gold);
+  border-radius:12px;
+  padding:25px;
+  margin:25px 0;
+}
+.credentials-box h3{
+  color:var(--gold);
+  margin-bottom:18px;
+  font-size:18px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.credential-item{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:12px 0;
+  border-bottom:1px solid var(--border);
+}
+.credential-item:last-child{
+  border-bottom:none;
+}
+.credential-label{
+  color:var(--muted);
+  font-size:14px;
+  font-weight:600;
+}
+.credential-value{
+  font-weight:700;
+  color:var(--text);
+  font-family:monospace;
+  font-size:15px;
+  background:var(--bg2);
+  padding:6px 12px;
+  border-radius:6px;
+}
+.credentials-warning{
+  background:rgba(255,107,107,0.1);
+  border:1px solid rgba(255,107,107,0.3);
+  border-radius:8px;
+  padding:12px;
+  margin-top:15px;
+  color:var(--red);
+  font-size:13px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+/* Totals */
+.totals{
+  margin-top:30px;
+  padding:25px;
+  background:var(--bg3);
+  border-radius:12px;
+  border:1px solid var(--border);
+}
+.total-row{
+  display:flex;
+  justify-content:space-between;
+  padding:10px 0;
+  font-size:15px;
+}
+.total-row.final{
+  border-top:3px solid var(--gold);
+  margin-top:15px;
+  padding-top:20px;
+  font-size:24px;
+  font-weight:900;
+  color:var(--gold);
+}
+
+/* QR Section */
+.qr-section{
+  text-align:center;
+  padding:40px 30px;
+  border-top:2px solid var(--border);
+  background:var(--bg3);
+}
+.qr-section h3{
+  margin-bottom:20px;
+  color:var(--gold);
+  font-size:20px;
+}
+#qrcode{
+  display:inline-block;
+  padding:20px;
+  background:white;
+  border-radius:12px;
+  margin:15px 0;
+  box-shadow:0 4px 20px rgba(201,168,76,0.2);
+}
+.qr-note{
+  font-size:13px;
+  color:var(--muted);
+  margin-top:15px;
+  line-height:1.8;
+}
+
+/* Footer */
+.invoice-footer{
+  padding:25px 35px;
+  background:var(--bg3);
+  text-align:center;
+  font-size:13px;
+  color:var(--muted);
+}
+.company-name{
+  font-weight:700;
+  color:var(--gold);
+  font-size:16px;
+}
+.support-info{
+  margin-top:20px;
+  padding-top:20px;
+  border-top:1px solid var(--border);
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+.support-item{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+/* Print Button */
+.print-btn{
+  position:fixed;
+  bottom:30px;
+  left:30px;
+  background:var(--gold);
+  color:#09090F;
+  border:none;
+  padding:15px 30px;
+  border-radius:50px;
+  font-family:'Cairo',sans-serif;
+  font-weight:700;
+  cursor:pointer;
+  font-size:15px;
+  box-shadow:0 6px 20px rgba(201,168,76,0.4);
+  transition:all 0.3s;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  z-index:999;
+}
+.print-btn:hover{
+  background:var(--gl);
+  transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(201,168,76,0.5);
+}
+
+/* Loading Spinner */
+.loading{
+  position:fixed;
+  inset:0;
+  background:rgba(9,9,15,0.95);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  z-index:9999;
+}
+.spinner{
+  width:60px;
+  height:60px;
+  border:4px solid var(--border);
+  border-top-color:var(--gold);
+  border-radius:50%;
+  animation:spin 1s linear infinite;
+}
+@keyframes spin{
+  to{transform:rotate(360deg);}
+}
+.loading-text{
+  margin-top:20px;
+  color:var(--gold);
+  font-size:16px;
+  font-weight:600;
+}
+
+@media print{
+  body{background:white;color:#000;}
+  .print-btn,.verification-badge{display:none;}
+  .invoice-container{border:1px solid #ddd;box-shadow:none;}
+}
+
+@media (max-width:768px){
+  .invoice-meta{grid-template-columns:1fr;}
+  .verification-badge{
+    top:10px;
+    right:10px;
+    left:10px;
+    padding:12px 15px;
+  }
+  .print-btn{
+    bottom:15px;
+    left:15px;
+    padding:12px 20px;
+    font-size:14px;
+  }
+}
 </style>
 </head>
 <body>
-<!-- نفس المحتوى السابق -->
+
+<!-- Loading Screen -->
+<div class="loading" id="loadingScreen">
+  <div class="spinner"></div>
+  <div class="loading-text">جاري التحقق من الفاتورة...</div>
+</div>
+
+<!-- Verification Badge -->
+<div class="verification-badge loading" id="verifyBadge">
+  <div class="badge-icon">⏳</div>
+  <div class="badge-content">
+    <h3 id="badgeTitle">جاري التحقق...</h3>
+    <p id="badgeSubtitle">يرجى الانتظار</p>
+  </div>
+</div>
+
+<!-- Print Button -->
+<button class="print-btn" onclick="window.print()">
+  <span>🖨️</span>
+  <span>طباعة الفاتورة</span>
+</button>
+
+<!-- Invoice Container -->
+<div class="invoice-container">
+  <!-- Header -->
+  <div class="invoice-header">
+    <div class="logo">PrimeDigitals</div>
+    <div class="tagline">منصتك الموثوقة للاشتراكات الرقمية</div>
+    <div class="invoice-status" id="statusBadge">✓ فاتورة مدفوعة</div>
+  </div>
+
+  <!-- Body -->
+  <div class="invoice-body">
+    <!-- Meta Info -->
+    <div class="invoice-meta">
+      <div class="meta-section">
+        <h3>📄 معلومات الفاتورة</h3>
+        <p class="invoice-number" id="invoiceNumber">INV-000000</p>
+        <p><strong>التاريخ:</strong> <span id="invoiceDate"></span></p>
+        <p><strong>طريقة الدفع:</strong> <span id="paymentMethod"></span></p>
+        <p><strong>الحالة:</strong> <span id="invoiceStatus"></span></p>
+      </div>
+      
+      <div class="meta-section">
+        <h3>👤 معلومات العميل</h3>
+        <p><strong>الاسم:</strong> <span id="customerName"></span></p>
+        <p><strong>البريد:</strong> <span id="customerEmail"></span></p>
+        <p><strong>رقم الطلب:</strong> <span id="orderId"></span></p>
+      </div>
+    </div>
+
+    <!-- Items Table -->
+    <table class="items-table">
+      <thead>
+        <tr>
+          <th>المنتج</th>
+          <th style="text-align:center;width:120px;">الفترة</th>
+          <th style="text-align:center;width:100px;">العملة</th>
+          <th style="text-align:left;width:130px;">السعر</th>
+        </tr>
+      </thead>
+      <tbody id="itemsBody"></tbody>
+    </table>
+
+    <!-- Credentials (if available) -->
+    <div class="credentials-box" id="credentialsBox" style="display:none;">
+      <h3>🔐 بيانات الوصول السرية</h3>
+      <div class="credential-item">
+        <span class="credential-label">البريد الإلكتروني</span>
+        <span class="credential-value" id="credEmail">-</span>
+      </div>
+      <div class="credential-item">
+        <span class="credential-label">كلمة المرور</span>
+        <span class="credential-value" id="credPassword">-</span>
+      </div>
+      <div class="credential-item" id="credUsernameRow" style="display:none;">
+        <span class="credential-label">اسم المستخدم</span>
+        <span class="credential-value" id="credUsername">-</span>
+      </div>
+      <div class="credentials-warning">
+        <span>⚠️</span>
+        <span>يرجى حفظ هذه البيانات في مكان آمن. لن تتمكن من استرجاعها لاحقاً.</span>
+      </div>
+    </div>
+
+    <!-- Totals -->
+    <div class="totals">
+      <div class="total-row">
+        <span>المجموع الفرعي:</span>
+        <span id="subtotal">$0.00</span>
+      </div>
+      <div class="total-row">
+        <span>الخصم:</span>
+        <span id="discount" style="color:var(--green);">$0.00</span>
+      </div>
+      <div class="total-row final">
+        <span>الإجمالي المدفوع:</span>
+        <span id="grandTotal">$0.00</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Section -->
+  <div class="qr-section">
+    <h3>📱 رمز التحقق السريع (QR Code)</h3>
+    <div id="qrcode"></div>
+    <p class="qr-note">
+      امسح هذا الرمز بكاميرا الهاتف للتحقق من صحة الفاتورة في أي وقت<br>
+      يمكن لمديري الشركات استخدام هذا الرمز للتأكد من صحة الفاتورة
+    </p>
+  </div>
+
+  <!-- Footer -->
+  <div class="invoice-footer">
+    <p class="company-name">PrimeDigitals</p>
+    <p style="margin:10px 0;">شكراً لثقتك في خدماتنا</p>
+    
+    <div class="support-info">
+      <div class="support-item">
+        <span>📧</span>
+        <span>support@primedigitals.com</span>
+      </div>
+      <div class="support-item">
+        <span>💬</span>
+        <span>واتساب: متاح 24/7</span>
+      </div>
+      <div class="support-item">
+        <span>🌐</span>
+        <span>www.primedigitals.com</span>
+      </div>
+    </div>
+    
+    <p style="margin-top:25px;font-size:11px;opacity:0.7;">
+      © 2026 PrimeDigitals. جميع الحقوق محفوظة.
+    </p>
+  </div>
+</div>
+
+<!-- QR Code Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Firebase SDK -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCGm3VNJSnCqJ4kgl6qHY7BBCBYFjPhcwU",
+  authDomain: "primedigitals-1802f.firebaseapp.com",
+  projectId: "primedigitals-1802f",
+  storageBucket: "primedigitals-1802f.firebasestorage.app",
+  messagingSenderId: "199046655270",
+  appId: "1:199046655270:web:07f214e11244f615d625c7"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+// Make db available globally
+window.fbDB = db;
+window.fbQuery = query;
+window.fbWhere = where;
+window.fbGetDocs = getDocs;
+window.fbCollection = collection;
+</script>
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+//  📄 INVOICE VERIFICATION & DISPLAY SYSTEM
+// ═══════════════════════════════════════════════════════════════
+
+let invoiceData = null;
+
+// ── Get URL Parameters ─────────────────────────────────────────
+function getUrlParams(){
+  const params = new URLSearchParams(window.location.search);
+  return {
+    orderId: params.get('orderId') || params.get('id') || '',
+    invoiceNumber: params.get('invoice') || params.get('invoiceNumber') || '',
+    customerName: params.get('name') || '',
+    customerEmail: params.get('email') || '',
+    product: params.get('product') || '',
+    price: params.get('price') || '0',
+    currency: params.get('currency') || 'USD',
+    period: params.get('period') || 'Monthly',
+    paymentMethod: params.get('method') || 'PayPal',
+    status: params.get('status') || 'Completed',
+    date: params.get('date') || new Date().toISOString(),
+    credEmail: params.get('credEmail') || '',
+    credPassword: params.get('credPassword') || '',
+    credUsername: params.get('credUsername') || ''
+  };
+}
+
+// ── Verify Invoice from Firebase ───────────────────────────────
+async function verifyInvoiceFromFirebase(orderId, invoiceNumber){
+  try {
+    if(!window.fbDB) throw new Error('Firebase not initialized');
+    
+    const ordersRef = window.fbCollection(window.fbDB, 'orders');
+    const q = window.fbQuery(
+      ordersRef,
+      window.fbWhere('id', '==', orderId),
+      window.fbWhere('invoiceNumber', '==', invoiceNumber)
+    );
+    
+    const snapshot = await window.fbGetDocs(q);
+    
+    if(snapshot.empty){
+      return { verified: false, message: 'الفاتورة غير موجودة' };
+    }
+    
+    const orderDoc = snapshot.docs[0].data();
+    
+    return {
+      verified: true,
+      message: 'فاتورة موثقة',
+      data: orderDoc
+    };
+    
+  } catch(error) {
+    console.error('Firebase verification error:', error);
+    return { verified: 'unknown', message: 'فشل التحقق من Firebase' };
+  }
+}
+
+// ── Update Verification Badge ──────────────────────────────────
+function updateVerificationBadge(status, title, subtitle){
+  const badge = document.getElementById('verifyBadge');
+  const badgeTitle = document.getElementById('badgeTitle');
+  const badgeSubtitle = document.getElementById('badgeSubtitle');
+  const icon = badge.querySelector('.badge-icon');
+  
+  badge.className = 'verification-badge ' + status;
+  badgeTitle.textContent = title;
+  badgeSubtitle.textContent = subtitle;
+  
+  if(status === 'verified'){
+    badgeTitle.className = 'badge-verified';
+    icon.textContent = '✅';
+  } else if(status === 'pending'){
+    badgeTitle.className = 'badge-pending';
+    icon.textContent = '⏳';
+  } else if(status === 'invalid'){
+    badgeTitle.className = 'badge-invalid';
+    icon.textContent = '❌';
+  }
+}
+
+// ── Populate Invoice Display ───────────────────────────────────
+function populateInvoice(data){
+  invoiceData = data;
+  
+  // Invoice Number & Date
+  document.getElementById('invoiceNumber').textContent = data.invoiceNumber || 'N/A';
+  document.getElementById('invoiceDate').textContent = new Date(data.date).toLocaleDateString('ar-EG', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  // Payment Info
+  document.getElementById('paymentMethod').textContent = data.paymentMethod || 'N/A';
+  document.getElementById('invoiceStatus').textContent = 
+    data.status === 'Completed' ? 'مدفوعة ✓' : 
+    data.status === 'Pending' ? 'قيد المراجعة' : 
+    data.status;
+  
+  // Customer Info
+  document.getElementById('customerName').textContent = data.customerName || data.payerName || 'عميل';
+  document.getElementById('customerEmail').textContent = data.customerEmail || '';
+  document.getElementById('orderId').textContent = (data.orderId || data.id || '').substring(0, 8).toUpperCase();
+  
+  // Status Badge
+  const statusBadge = document.getElementById('statusBadge');
+  if(data.status === 'Completed'){
+    statusBadge.textContent = '✓ فاتورة مدفوعة';
+    statusBadge.style.background = 'rgba(93,235,122,0.3)';
+  } else if(data.status === 'Pending'){
+    statusBadge.textContent = '⏳ قيد المراجعة';
+    statusBadge.style.background = 'rgba(255,179,71,0.3)';
+  }
+  
+  // Items Table
+  const priceNum = parseFloat(data.price || data.priceUSD || 0);
+  const currency = data.currency || 'USD';
+  
+  document.getElementById('itemsBody').innerHTML = `
+    <tr>
+      <td>
+        <div class="item-name">${data.product || 'منتج رقمي'}</div>
+        <div class="item-desc">
+          <span class="item-badge">${data.period || 'شهري'}</span>
+          ${data.category || 'اشتراك رقمي'}
+        </div>
+      </div>
+      <td style="text-align:center;font-weight:600;">${data.period || 'شهري'}</td>
+      <td style="text-align:center;font-weight:600;">${currency}</td>
+      <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
+        ${priceNum.toFixed(2)}
+      </div>
+    </tr>
+  `;
+  
+  // Totals
+  const priceDisplay = `${currency} ${priceNum.toFixed(2)}`;
+  document.getElementById('subtotal').textContent = priceDisplay;
+  document.getElementById('discount').textContent = `${currency} 0.00`;
+  document.getElementById('grandTotal').textContent = priceDisplay;
+  
+  // Credentials (if available)
+  if(data.credEmail || data.activationEmail || data.credPassword || data.accountPassword){
+    const credBox = document.getElementById('credentialsBox');
+    credBox.style.display = 'block';
+    
+    if(data.credEmail || data.activationEmail){
+      document.getElementById('credEmail').textContent = data.credEmail || data.activationEmail;
+    }
+    if(data.credPassword || data.accountPassword){
+      document.getElementById('credPassword').textContent = data.credPassword || data.accountPassword;
+    }
+    if(data.credUsername || data.socialUsername){
+      document.getElementById('credUsernameRow').style.display = 'flex';
+      document.getElementById('credUsername').textContent = data.credUsername || data.socialUsername;
+    }
+  }
+  
+  // Generate QR Code using the current page URL
+  const qrUrl = window.location.href;
+  const qrContainer = document.getElementById('qrcode');
+  qrContainer.innerHTML = '';
+  new QRCode(qrContainer, {
+    text: qrUrl,
+    width: 200,
+    height: 200,
+    colorDark: '#09090F',
+    colorLight: '#ffffff',
+    correctLevel: QRCode.CorrectLevel.H
+  });
+}
+
+// ── Main Initialization ────────────────────────────────────────
+async function initInvoice(){
+  const params = getUrlParams();
+  
+  document.querySelector('.loading-text').textContent = 'جاري التحقق من الفاتورة...';
+  
+  if(!params.orderId && !params.invoiceNumber){
+    setTimeout(() => {
+      document.getElementById('loadingScreen').style.display = 'none';
+      updateVerificationBadge('invalid', 'فاتورة غير صالحة', 'بيانات غير كاملة');
+    }, 1000);
+    return;
+  }
+  
+  try {
+    const verification = await verifyInvoiceFromFirebase(params.orderId, params.invoiceNumber);
+    
+    setTimeout(() => {
+      document.getElementById('loadingScreen').style.display = 'none';
+      
+      if(verification.verified === true){
+        updateVerificationBadge('verified', 'فاتورة موثقة ✓', 'تم التحقق من Firebase');
+        populateInvoice(verification.data);
+      } else if(verification.verified === false){
+        updateVerificationBadge('pending', 'فاتورة محلية', 'لم يتم التحقق من Firebase');
+        populateInvoice(params);
+      } else {
+        updateVerificationBadge('pending', 'فاتورة محلية', 'تحقق محلي فقط');
+        populateInvoice(params);
+      }
+    }, 1500);
+    
+  } catch(error) {
+    console.error('Initialization error:', error);
+    setTimeout(() => {
+      document.getElementById('loadingScreen').style.display = 'none';
+      updateVerificationBadge('invalid', 'خطأ في التحميل', error.message);
+    }, 1000);
+  }
+}
+
+window.addEventListener('DOMContentLoaded', initInvoice);
+</script>
+
 </body>
 </html>
