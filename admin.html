@@ -6,6 +6,7 @@
 <title>Admin Panel — PrimeDigitals</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <style>
+/* جميع الستايلات كما هي (لم تتغير) */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -784,10 +785,9 @@ function renderInvoicesTable(){
   });
 }
 
-// 🔥 DYNAMIC URL (fixes 404)
+// 🔥 FIXED: using ABSOLUTE URL
 function createAdminInvoiceURL(order){
-  const base = window.location.origin;
-  const baseURL = `${base}/invoice.html`;
+  const baseURL = 'https://primedigitals.github.io/invoice.html';
   const params = new URLSearchParams({
     orderId: order.id,
     invoice: order.invoiceNumber,
@@ -879,13 +879,7 @@ function printInvoice(id){
   const o=orders.find(x=>x.id===id);
   if(!o){showToast('Order not found','error');return;}
   const invUrl = createAdminInvoiceURL(o);
-  // Check if invoice.html exists before opening
-  fetch(invUrl, { method: 'HEAD' })
-    .then(res => {
-      if(res.ok) window.open(invUrl, '_blank');
-      else showToast('❌ invoice.html not found on server! Make sure it is uploaded.', 'error');
-    })
-    .catch(() => showToast('❌ Cannot reach invoice.html', 'error'));
+  window.open(invUrl, '_blank');
 }
 
 // ── MANUAL INVOICE FUNCTIONS ──────────────────────────────
