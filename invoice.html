@@ -6,7 +6,6 @@
 <title>فاتورة إلكترونية - PrimeDigitals</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
-/* نفس الستايلات السابقة (لم تتغير) */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -741,7 +740,7 @@ function populateInvoice(data){
   
   document.getElementById('itemsBody').innerHTML = `
     <tr>
-      <tr>
+      <td>
         <div class="item-name">${data.product || 'منتج رقمي'}</div>
         <div class="item-desc">
           <span class="item-badge">${data.period || 'شهري'}</span>
@@ -752,7 +751,7 @@ function populateInvoice(data){
       <td style="text-align:center;font-weight:600;">${currency}</td>
       <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
         ${priceNum.toFixed(2)}
-      </td>
+      </div>
     </tr>
   `;
   
@@ -779,16 +778,10 @@ function populateInvoice(data){
     }
   }
   
-  // 🔥 IMPORTANT: QR Code generation using the current page URL
-  // This URL contains all necessary parameters (orderId, invoice, etc.)
+  // Generate QR Code using the current page URL
   const qrUrl = window.location.href;
-  console.log('QR URL:', qrUrl); // For debugging (check browser console)
-  
-  // Clear previous QR code if exists
   const qrContainer = document.getElementById('qrcode');
   qrContainer.innerHTML = '';
-  
-  // Generate new QR code
   new QRCode(qrContainer, {
     text: qrUrl,
     width: 200,
@@ -803,11 +796,9 @@ function populateInvoice(data){
 async function initInvoice(){
   const params = getUrlParams();
   
-  // Update loading text
   document.querySelector('.loading-text').textContent = 'جاري التحقق من الفاتورة...';
   
   if(!params.orderId && !params.invoiceNumber){
-    // No invoice data
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
       updateVerificationBadge('invalid', 'فاتورة غير صالحة', 'بيانات غير كاملة');
@@ -816,22 +807,18 @@ async function initInvoice(){
   }
   
   try {
-    // Try to verify from Firebase
     const verification = await verifyInvoiceFromFirebase(params.orderId, params.invoiceNumber);
     
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
       
       if(verification.verified === true){
-        // Verified from Firebase
         updateVerificationBadge('verified', 'فاتورة موثقة ✓', 'تم التحقق من Firebase');
         populateInvoice(verification.data);
       } else if(verification.verified === false){
-        // Not found in Firebase, use URL params
         updateVerificationBadge('pending', 'فاتورة محلية', 'لم يتم التحقق من Firebase');
         populateInvoice(params);
       } else {
-        // Firebase error, use URL params
         updateVerificationBadge('pending', 'فاتورة محلية', 'تحقق محلي فقط');
         populateInvoice(params);
       }
@@ -846,7 +833,6 @@ async function initInvoice(){
   }
 }
 
-// Start when DOM is ready
 window.addEventListener('DOMContentLoaded', initInvoice);
 </script>
 
