@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>Admin Panel — PrimeDigitals</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
@@ -21,7 +21,6 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .login-logo{font-family:var(--serif);font-size:26px;font-weight:700;margin-bottom:8px;}
 .login-logo span{color:var(--gold);}
 .login-sub{font-size:13px;color:var(--muted);margin-bottom:36px;}
-
 .finput{width:100%;padding:12px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;transition:border .2s;margin-bottom:16px;}
 .finput:focus{border-color:var(--gold);}
 .flabel{font-size:12px;font-weight:600;text-align:left;display:block;margin-bottom:7px;letter-spacing:.5px;color:var(--muted);text-transform:uppercase;}
@@ -29,11 +28,9 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .fselect:focus{border-color:var(--gold);}
 .ftextarea{width:100%;padding:11px 15px;background:var(--bg3);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--sans);font-size:14px;outline:none;resize:vertical;min-height:76px;transition:border .2s;}
 .ftextarea:focus{border-color:var(--gold);}
-
 .btn-gold{width:100%;padding:13px;background:var(--gold);color:#09090F;border:none;border-radius:4px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.5px;}
 .btn-gold:hover{background:var(--gl);}
 .login-err{font-size:13px;color:#ff6b6b;margin-top:12px;display:none;}
-
 #dashboard{display:none;min-height:100vh;}
 .layout{display:flex;min-height:100vh;}
 .sidebar{width:240px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;position:sticky;top:0;height:100vh;overflow-y:auto;}
@@ -44,25 +41,21 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .nav-item:hover{color:var(--text);background:var(--bg3);}
 .nav-item.active{color:var(--gold);background:rgba(201,168,76,.05);border-left-color:var(--gold);}
 .sidebar-footer{margin-top:auto;padding:18px;border-top:1px solid var(--border);}
-.logout-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:var(--sans);font-size:13px;cursor:pointer;transition:all .2s;}
+.logout-btn{width:100%;padding:10px;background:transparent;border:1px solid var(--border);border-radius:4px;color:var(--muted);font-family:var(--sans);font-size:13px;cursor:pointer;}
 .logout-btn:hover{border-color:rgba(220,60,60,.4);color:#ff6b6b;}
-
 .main{flex:1;padding:30px 34px;overflow-y:auto;}
 .page-header{margin-bottom:28px; display: flex; justify-content: space-between; align-items: center;}
 .page-title{font-family:var(--serif);font-size:30px;font-weight:700;margin-bottom:4px;}
 .page-sub{font-size:14px;color:var(--muted);}
 .tab-content{display:none;}
 .tab-content.active{display:block;}
-
 .stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(148px,1fr));gap:14px;margin-bottom:28px;}
 .stat-card{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:18px;}
 .s-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:7px;font-weight:600;}
 .s-val{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--gold);}
-
 .scard{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:22px;}
 .scard-header{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
 .scard-title{font-size:14px;font-weight:600;}
-
 .btn-sm{padding:7px 15px;background:var(--gold);color:#09090F;border:none;border-radius:3px;font-family:var(--sans);font-size:12px;font-weight:700;cursor:pointer;letter-spacing:.4px;transition:all .2s;white-space:nowrap;}
 .btn-sm:hover{background:var(--gl);}
 .btn-outline{background:transparent;color:var(--muted);border:1px solid var(--border);}
@@ -73,14 +66,12 @@ body{background:var(--bg);color:var(--text);font-family:var(--sans);min-height:1
 .btn-blue:hover{background:rgba(0,180,255,.22);}
 .btn-green{background:rgba(60,200,100,.12);color:#5deb7a;border:1px solid rgba(60,200,100,.28);}
 .btn-green:hover{background:rgba(60,200,100,.22);}
-
 table{width:100%;border-collapse:collapse;}
 th{padding:9px 14px;text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);font-weight:600;background:var(--bg3);border-bottom:1px solid var(--border);}
 td{padding:13px 14px;font-size:13.5px;border-bottom:1px solid rgba(201,168,76,.05);vertical-align:middle;}
 tr:last-child td{border-bottom:none;}
 tr:hover td{background:rgba(201,168,76,.015);}
 .td-actions{display:flex;gap:6px;flex-wrap:wrap;}
-
 .badge{padding:3px 9px;border-radius:2px;font-size:10px;font-weight:700;letter-spacing:.5px;}
 .badge-gold{background:rgba(201,168,76,.15);color:var(--gold);}
 .badge-blue{background:rgba(0,180,255,.14);color:#5bcfff;}
@@ -90,11 +81,9 @@ tr:hover td{background:rgba(201,168,76,.015);}
 .status-pending{background:rgba(255,140,0,.14);color:#ffb347;}
 .status-completed{background:rgba(60,180,90,.14);color:#5deb7a;}
 .status-cancelled{background:rgba(220,60,60,.14);color:#ff6b6b;}
-
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
 .form-group{margin-bottom:14px;}
 .form-hint{font-size:11.5px;color:var(--muted);margin-top:5px;line-height:1.5;}
-
 .settings-grid{display:grid;gap:18px;}
 .settings-section{background:var(--bg2);border:1px solid var(--border);border-radius:8px;overflow:hidden;}
 .settings-header{padding:14px 18px;border-bottom:1px solid var(--border);font-weight:600;font-size:14px;display:flex;align-items:center;gap:9px;}
@@ -104,37 +93,30 @@ tr:hover td{background:rgba(201,168,76,.015);}
 .config-note code{background:var(--bg3);padding:2px 6px;border-radius:3px;font-family:monospace;font-size:11px;}
 .save-btn{padding:11px 28px;background:var(--gold);color:#09090F;border:none;border-radius:4px;font-family:var(--sans);font-size:14px;font-weight:700;cursor:pointer;transition:all .2s;}
 .save-btn:hover{background:var(--gl);}
-
 .order-row-detail{display:none;background:var(--bg3);}
 .order-row-detail td{padding:14px 18px;}
 .detail-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px;}
 .detail-item{background:var(--bg2);border:1px solid var(--border);border-radius:6px;padding:12px;}
 .detail-label{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--muted);margin-bottom:4px;font-weight:600;}
 .detail-val{font-size:13px;color:var(--text);word-break:break-all;}
-
 .filter-row{display:flex;gap:10px;align-items:center;flex-wrap:wrap;padding:12px 18px;border-bottom:1px solid var(--border);background:var(--bg3);}
 .filter-row input,.filter-row select{padding:7px 12px;background:var(--bg2);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:var(--sans);font-size:13px;outline:none;}
 .filter-row input:focus,.filter-row select:focus{border-color:var(--gold);}
 .orders-count{font-size:13px;color:var(--muted);margin-left:auto;}
-
 .ov{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);z-index:100;display:flex;align-items:center;justify-content:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .2s;}
 .ov.open{opacity:1;pointer-events:all;}
 .mo{background:var(--bg2);border:1px solid var(--borderh);border-radius:10px;padding:30px;width:100%;max-width:540px;max-height:90vh;overflow-y:auto;}
 .mo-title{font-family:var(--serif);font-size:22px;font-weight:700;margin-bottom:22px;}
 .mo-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:22px;}
-
 .preview-frame{width:100%;height:580px;border:1px solid var(--border);border-radius:8px;background:var(--bg3);}
-
 .toast{position:fixed;bottom:22px;right:22px;background:var(--bg2);border:1px solid var(--borderh);border-radius:6px;padding:11px 18px;font-size:14px;z-index:9999;transform:translateY(60px);opacity:0;transition:all .3s;}
 .toast.show{transform:translateY(0);opacity:1;}
 .toast.success{border-color:rgba(60,180,90,.4);color:#5deb7a;}
 .toast.error{border-color:rgba(220,60,60,.4);color:#ff6b6b;}
-
 .fb-status{display:inline-flex;align-items:center;gap:6px;font-size:11px;padding:4px 10px;border-radius:3px;font-weight:600;}
 .fb-ok{background:rgba(60,200,100,.1);color:#5deb7a;border:1px solid rgba(60,200,100,.25);}
 .fb-err{background:rgba(220,60,60,.1);color:#ff6b6b;border:1px solid rgba(220,60,60,.25);}
 .fb-load{background:rgba(201,168,76,.1);color:var(--gold);border:1px solid var(--border);}
-
 @media(max-width:768px){.sidebar{display:none;}.main{padding:18px 14px;}.form-row{grid-template-columns:1fr;}}
 </style>
 </head>
@@ -145,7 +127,7 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="login-logo">Prime<span>Digitals</span></div>
     <p class="login-sub">Admin Control Panel</p>
     <label class="flabel">Password</label>
-    <input type="password" class="finput" id="loginPassword" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()"/>
+    <input type="password" class="finput" id="loginPassword" placeholder="Enter admin password" onkeydown="if(event.key==='Enter')doLogin()">
     <button class="btn-gold" onclick="doLogin()">Sign In</button>
     <p class="login-err" id="loginErr">Incorrect password. Try again.</p>
   </div>
@@ -163,7 +145,6 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="nav-item" onclick="showTab('preview',this)"><span>👁️</span> Preview Store</div>
     <div class="sidebar-footer"><button class="logout-btn" onclick="logout()">Sign Out</button></div>
   </div>
-
   <div class="main">
     <div class="tab-content active" id="tab-orders">
       <div class="page-header">
@@ -173,7 +154,7 @@ tr:hover td{background:rgba(201,168,76,.015);}
       <div class="stats-row" id="orderStatsRow"></div>
       <div class="scard">
         <div class="filter-row">
-          <input type="text" id="orderSearch" placeholder="Search by email, product, order ID..." oninput="renderOrdersTable()" style="min-width:220px"/>
+          <input type="text" id="orderSearch" placeholder="Search by email, product, order ID..." oninput="renderOrdersTable()" style="min-width:220px">
           <select id="orderTypeFilter" onchange="renderOrdersTable()"><option value="">All Types</option><option value="software">Software</option><option value="social">Social Media</option><option value="ai">AI Tools</option></select>
           <select id="orderStatusFilter" onchange="renderOrdersTable()"><option value="">All Statuses</option><option value="Pending">Pending</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select>
           <div class="orders-count" id="ordersCount"></div>
@@ -183,36 +164,32 @@ tr:hover td{background:rgba(201,168,76,.015);}
         <div style="overflow-x:auto"><td><thead><tr><th>Order ID</th><th>Date</th><th>Customer Email</th><th>Product</th><th>Type</th><th>Amount</th><th>Method</th><th>Status</th><th>Actions</th></tr></thead><tbody id="ordersTable"></tbody></table></div>
       </div>
     </div>
-
     <div id="tab-invoices" class="tab-content">
       <div class="page-header"><div class="page-title">Invoices Management</div><div class="page-sub">View and manage all invoices with QR verification</div></div>
       <div class="stats-row"><div class="stat-card"><div class="s-label">Total Invoices</div><div class="s-val" id="is_total">0</div></div><div class="stat-card"><div class="s-label">This Month</div><div class="s-val" id="is_month">0</div></div><div class="stat-card"><div class="s-label">Verified</div><div class="s-val" id="is_verified">0</div></div><div class="stat-card"><div class="s-label">Revenue</div><div class="s-val" id="is_revenue">$0</div></div></div>
       <div class="scard"><div class="filter-row"><input type="text" id="searchInvoice" placeholder="Search..." onkeyup="renderInvoicesTable()"><select id="filterInvoiceStatus" onchange="renderInvoicesTable()"><option value="">All Status</option><option value="Completed">Paid</option><option value="Pending">Pending</option></select><button class="btn-sm btn-blue" onclick="refreshInvoicesFromFirebase()">🔄 Refresh</button><span class="orders-count" id="invoicesCount">0 invoices</span></div><div style="overflow-x:auto;"><table id="invoicesTable"><thead><tr><th>Invoice #</th><th>Order ID</th><th>Customer</th><th>Product</th><th>Amount</th><th>Status</th><th>Date</th><th>Actions</th></tr></thead><tbody></tbody></table></div></div>
     </div>
-
     <div class="tab-content" id="tab-products">
       <div class="page-header"><div class="page-title">Products</div><div class="page-sub">Manage your digital subscription catalog — synced with Firebase</div></div>
       <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px"><span id="fbBadge" class="fb-status fb-load">⏳ Connecting Firebase...</span></div>
       <div class="stats-row" id="prodStatsRow"></div>
-      <div class="scard"><div class="scard-header"><div class="scard-title">All Products</div><button class="btn-sm" onclick="openAddProd()">+ Add Product</button></div><div style="overflow-x:auto"><table><thead><tr><th>Product</th><th>Category</th><th>Type</th><th>Price (USD)</th><th>Badge</th><th>Firebase</th><th>Actions</th></tr></thead><tbody id="prodsTable"></tbody></tr></div></div>
+      <div class="scard"><div class="scard-header"><div class="scard-title">All Products</div><button class="btn-sm" onclick="openAddProd()">+ Add Product</button></div><div style="overflow-x:auto"><table><thead><tr><th>Product</th><th>Category</th><th>Type</th><th>Price (USD)</th><th>Badge</th><th>Firebase</th><th>Actions</th></tr></thead><tbody id="prodsTable"></tbody></table></div></div>
     </div>
-
     <div class="tab-content" id="tab-settings">
       <div class="page-header"><div class="page-title">Settings</div><div class="page-sub">Configure payments, emails, currencies, and store details</div></div>
       <div class="settings-grid">
-        <div class="settings-section"><div class="settings-header">🏪 Store Settings</div><div class="settings-body"><div class="config-note">The support email is displayed on the website and receives order notifications.</div><div class="form-row"><div class="form-group"><label class="flabel">Support / Admin Email</label><input type="email" class="finput" id="s_storeEmail" placeholder="your@email.com"/><div class="form-hint">Receives new order notifications and shown as contact email on site.</div></div><div class="form-group"><label class="flabel">New Admin Password</label><input type="password" class="finput" id="s_adminPassword" placeholder="Leave blank to keep current"/></div></div></div></div>
-        <div class="settings-section"><div class="settings-header">💱 Currency & Exchange Rates</div><div class="settings-body"><div class="config-note">Products are priced in <strong>USD</strong>. The website auto-converts prices to EGP, SAR, or USD based on customer selection.<br/>Default currency shown to visitors: <strong>EGP (Egyptian Pound) 🇪🇬</strong><br/>Update rates below to keep prices accurate.</div><div class="form-row"><div class="form-group"><label class="flabel">🇪🇬 USD → EGP Rate</label><input type="number" class="finput" id="s_rateEGP" placeholder="50.5" step="0.01" min="1"/><div class="form-hint">Example: 1 USD = 50.5 EGP</div></div><div class="form-group"><label class="flabel">🇸🇦 USD → SAR Rate</label><input type="number" class="finput" id="s_rateSAR" placeholder="3.75" step="0.01" min="1"/><div class="form-hint">Example: 1 USD = 3.75 SAR</div></div></div></div></div>
-        <div class="settings-section"><div class="settings-header">💳 PayPal Business</div><div class="settings-body"><div class="config-note">1. Go to <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a><br/>2. Log in → My Apps & Credentials → Create App<br/>3. Switch to <strong>Live</strong> and copy the <strong>Client ID</strong><br/>4. Paste it below and save.</div><div class="form-group"><label class="flabel">PayPal Client ID</label><input type="text" class="finput" id="s_paypalClientId" placeholder="AaBbCc...your-live-client-id"/></div></div></div>
-        <div class="settings-section"><div class="settings-header">🟢 PayMob — Card & Wallet Payments (MENA)</div><div class="settings-body"><div class="config-note">PayMob supports Visa, Mastercard, Meeza, and mobile wallets in EGP, SAR & USD.<br/>1. Register at <a href="https://paymob.com" target="_blank">paymob.com</a><br/>2. Go to <strong>Settings → Account Info</strong> → copy your <strong>API Key</strong><br/>3. Go to <strong>Payment Integrations</strong> → create a Card integration → copy the <strong>Integration ID</strong><br/>4. Go to <strong>iFrame</strong> section → create an iFrame → copy the <strong>iFrame ID</strong><br/>5. Paste all three below and save.</div><div class="form-row"><div class="form-group"><label class="flabel">PayMob API Key</label><input type="text" class="finput" id="s_paymobApiKey" placeholder="ZXlKaGJHY2lPaUpJVXpVeE1pSXNJ..."/><div class="form-hint">From Settings → Account Info</div></div><div class="form-group"><label class="flabel">Integration ID (Card)</label><input type="text" class="finput" id="s_paymobIntegId" placeholder="123456"/><div class="form-hint">From Payment Integrations</div></div></div><div class="form-row"><div class="form-group"><label class="flabel">iFrame ID</label><input type="text" class="finput" id="s_paymobIframeId" placeholder="987654"/><div class="form-hint">From iFrame section in PayMob dashboard</div></div><div class="form-group"><label class="flabel">HMAC Secret (optional)</label><input type="text" class="finput" id="s_paymobHmac" placeholder="For webhook verification"/><div class="form-hint">Used to verify PayMob callbacks</div></div></div></div></div>
-        <div class="settings-section"><div class="settings-header">📧 EmailJS — Email Delivery</div><div class="settings-body"><div class="config-note">1. Create free account at <a href="https://emailjs.com" target="_blank">emailjs.com</a><br/>2. Add Email Service (Gmail) → copy <strong>Service ID</strong><br/>3. Create <strong>Customer Invoice Template</strong> with variables:<br/><code>{{to_email}}</code> <code>{{customer_name}}</code> <code>{{product_name}}</code> <code>{{amount}}</code> <code>{{order_id}}</code> <code>{{date}}</code> <code>{{activation_email}}</code> <code>{{customer_username}}</code> <code>{{support_email}}</code><br/>4. Create <strong>Admin Notification Template</strong> with variables:<br/><code>{{to_email}}</code> <code>{{order_id}}</code> <code>{{product_name}}</code> <code>{{amount}}</code> <code>{{customer_email}}</code> <code>{{payer_name}}</code> <code>{{activation_email}}</code> <code>{{customer_username}}</code> <code>{{date}}</code> <code>{{time}}</code><br/>5. Go to Account → copy <strong>Public Key</strong></div><div class="form-row"><div class="form-group"><label class="flabel">Service ID</label><input type="text" class="finput" id="s_emailjsServiceId" placeholder="service_xxxxxxx"/></div><div class="form-group"><label class="flabel">Public Key</label><input type="text" class="finput" id="s_emailjsPublicKey" placeholder="xxxxxxxxxxxxxxx"/></div></div><div class="form-row"><div class="form-group"><label class="flabel">Customer Invoice Template ID</label><input type="text" class="finput" id="s_customerTemplateId" placeholder="template_xxxxxxx"/><div class="form-hint">Sent to customer after purchase</div></div><div class="form-group"><label class="flabel">Admin Notification Template ID</label><input type="text" class="finput" id="s_adminTemplateId" placeholder="template_yyyyyyy"/><div class="form-hint">Sent to your support email for each new order</div></div></div></div></div>
-        <div class="settings-section"><div class="settings-header">📞 Store Contact & Location</div><div class="settings-body"><div class="config-note">These details will be displayed in the footer of your website.</div><div class="form-row"><div class="form-group"><label class="flabel">Phone Number</label><input type="text" class="finput" id="s_storePhone" placeholder="+20 123 456 7890"/><div class="form-hint">Displayed in footer</div></div><div class="form-group"><label class="flabel">Location</label><input type="text" class="finput" id="s_storeLocation" placeholder="Cairo, Egypt"/><div class="form-hint">Your business location</div></div></div></div></div>
+        <div class="settings-section"><div class="settings-header">🏪 Store Settings</div><div class="settings-body"><div class="config-note">The support email is displayed on the website and receives order notifications.</div><div class="form-row"><div class="form-group"><label class="flabel">Support / Admin Email</label><input type="email" class="finput" id="s_storeEmail" placeholder="your@email.com"><div class="form-hint">Receives new order notifications and shown as contact email on site.</div></div><div class="form-group"><label class="flabel">New Admin Password</label><input type="password" class="finput" id="s_adminPassword" placeholder="Leave blank to keep current"></div></div></div></div>
+        <div class="settings-section"><div class="settings-header">💱 Currency & Exchange Rates</div><div class="settings-body"><div class="config-note">Products are priced in <strong>USD</strong>. The website auto-converts prices to EGP, SAR, or USD based on customer selection.<br>Default currency shown to visitors: <strong>EGP (Egyptian Pound) 🇪🇬</strong><br>Update rates below to keep prices accurate.</div><div class="form-row"><div class="form-group"><label class="flabel">🇪🇬 USD → EGP Rate</label><input type="number" class="finput" id="s_rateEGP" placeholder="50.5" step="0.01" min="1"><div class="form-hint">Example: 1 USD = 50.5 EGP</div></div><div class="form-group"><label class="flabel">🇸🇦 USD → SAR Rate</label><input type="number" class="finput" id="s_rateSAR" placeholder="3.75" step="0.01" min="1"><div class="form-hint">Example: 1 USD = 3.75 SAR</div></div></div></div></div>
+        <div class="settings-section"><div class="settings-header">💳 PayPal Business</div><div class="settings-body"><div class="config-note">1. Go to <a href="https://developer.paypal.com" target="_blank">developer.paypal.com</a><br>2. Log in → My Apps & Credentials → Create App<br>3. Switch to <strong>Live</strong> and copy the <strong>Client ID</strong><br>4. Paste it below and save.</div><div class="form-group"><label class="flabel">PayPal Client ID</label><input type="text" class="finput" id="s_paypalClientId" placeholder="AaBbCc...your-live-client-id"></div></div></div>
+        <div class="settings-section"><div class="settings-header">🟢 PayMob — Card & Wallet Payments (MENA)</div><div class="settings-body"><div class="config-note">PayMob supports Visa, Mastercard, Meeza, and mobile wallets in EGP, SAR & USD.<br>1. Register at <a href="https://paymob.com" target="_blank">paymob.com</a><br>2. Go to <strong>Settings → Account Info</strong> → copy your <strong>API Key</strong><br>3. Go to <strong>Payment Integrations</strong> → create a Card integration → copy the <strong>Integration ID</strong><br>4. Go to <strong>iFrame</strong> section → create an iFrame → copy the <strong>iFrame ID</strong><br>5. Paste all three below and save.</div><div class="form-row"><div class="form-group"><label class="flabel">PayMob API Key</label><input type="text" class="finput" id="s_paymobApiKey" placeholder="ZXlKaGJHY2lPaUpJVXpVeE1pSXNJ..."><div class="form-hint">From Settings → Account Info</div></div><div class="form-group"><label class="flabel">Integration ID (Card)</label><input type="text" class="finput" id="s_paymobIntegId" placeholder="123456"><div class="form-hint">From Payment Integrations</div></div></div><div class="form-row"><div class="form-group"><label class="flabel">iFrame ID</label><input type="text" class="finput" id="s_paymobIframeId" placeholder="987654"><div class="form-hint">From iFrame section in PayMob dashboard</div></div><div class="form-group"><label class="flabel">HMAC Secret (optional)</label><input type="text" class="finput" id="s_paymobHmac" placeholder="For webhook verification"></div></div></div></div>
+        <div class="settings-section"><div class="settings-header">📧 EmailJS — Email Delivery</div><div class="settings-body"><div class="config-note">1. Create free account at <a href="https://emailjs.com" target="_blank">emailjs.com</a><br>2. Add Email Service (Gmail) → copy <strong>Service ID</strong><br>3. Create <strong>Customer Invoice Template</strong> with variables:<br><code>{{to_email}}</code> <code>{{customer_name}}</code> <code>{{product_name}}</code> <code>{{amount}}</code> <code>{{order_id}}</code> <code>{{date}}</code> <code>{{activation_email}}</code> <code>{{customer_username}}</code> <code>{{support_email}}</code><br>4. Create <strong>Admin Notification Template</strong> with variables:<br><code>{{to_email}}</code> <code>{{order_id}}</code> <code>{{product_name}}</code> <code>{{amount}}</code> <code>{{customer_email}}</code> <code>{{payer_name}}</code> <code>{{activation_email}}</code> <code>{{customer_username}}</code> <code>{{date}}</code> <code>{{time}}</code><br>5. Go to Account → copy <strong>Public Key</strong></div><div class="form-row"><div class="form-group"><label class="flabel">Service ID</label><input type="text" class="finput" id="s_emailjsServiceId" placeholder="service_xxxxxxx"></div><div class="form-group"><label class="flabel">Public Key</label><input type="text" class="finput" id="s_emailjsPublicKey" placeholder="xxxxxxxxxxxxxxx"></div></div><div class="form-row"><div class="form-group"><label class="flabel">Customer Invoice Template ID</label><input type="text" class="finput" id="s_customerTemplateId" placeholder="template_xxxxxxx"><div class="form-hint">Sent to customer after purchase</div></div><div class="form-group"><label class="flabel">Admin Notification Template ID</label><input type="text" class="finput" id="s_adminTemplateId" placeholder="template_yyyyyyy"><div class="form-hint">Sent to your support email for each new order</div></div></div></div></div>
+        <div class="settings-section"><div class="settings-header">📞 Store Contact & Location</div><div class="settings-body"><div class="config-note">These details will be displayed in the footer of your website.</div><div class="form-row"><div class="form-group"><label class="flabel">Phone Number</label><input type="text" class="finput" id="s_storePhone" placeholder="+20 123 456 7890"><div class="form-hint">Displayed in footer</div></div><div class="form-group"><label class="flabel">Location</label><input type="text" class="finput" id="s_storeLocation" placeholder="Cairo, Egypt"></div></div></div></div>
         <div class="settings-section"><div class="settings-header">ℹ️ About Us</div><div class="settings-body"><div class="form-group"><label class="flabel">About Us (English)</label><textarea class="ftextarea" id="s_aboutEN" rows="4" placeholder="Write your About Us content in English..."></textarea></div><div class="form-group"><label class="flabel">About Us (العربية)</label><textarea class="ftextarea" id="s_aboutAR" rows="4" placeholder="اكتب محتوى من نحن بالعربية..." style="direction:rtl;text-align:right;"></textarea></div></div></div>
         <div class="settings-section"><div class="settings-header">🔒 Privacy Policy</div><div class="settings-body"><div class="form-group"><label class="flabel">Privacy Policy (English)</label><textarea class="ftextarea" id="s_privacyEN" rows="4" placeholder="Write your Privacy Policy in English..."></textarea></div><div class="form-group"><label class="flabel">Privacy Policy (العربية)</label><textarea class="ftextarea" id="s_privacyAR" rows="4" placeholder="اكتب سياسة الخصوصية بالعربية..." style="direction:rtl;text-align:right;"></textarea></div></div></div>
         <div class="settings-section"><div class="settings-header">↩️ Refund & Cancellation Policy</div><div class="settings-body"><div class="form-group"><label class="flabel">Refund Policy (English)</label><textarea class="ftextarea" id="s_refundEN" rows="4" placeholder="Write your Refund Policy in English..."></textarea></div><div class="form-group"><label class="flabel">Refund Policy (العربية)</label><textarea class="ftextarea" id="s_refundAR" rows="4" placeholder="اكتب سياسة الاسترجاع بالعربية..." style="direction:rtl;text-align:right;"></textarea></div></div></div>
         <button class="save-btn" onclick="saveSettings()">💾 Save All Settings</button>
       </div>
     </div>
-
     <div class="tab-content" id="tab-preview">
       <div class="page-header"><div class="page-title">Store Preview</div><div class="page-sub">Live preview of your storefront</div></div>
       <div style="display:flex;gap:10px;margin-bottom:14px"><button class="btn-sm" onclick="document.getElementById('previewFrame').src='index.html'">🔄 Refresh</button><button class="btn-sm btn-outline" onclick="window.open('index.html','_blank')">↗ Open in New Tab</button></div>
@@ -226,11 +203,11 @@ tr:hover td{background:rgba(201,168,76,.015);}
 <div class="ov" id="prodModal">
   <div class="mo">
     <div class="mo-title" id="prodModalTitle">Add Product</div>
-    <input type="hidden" id="editProdId"/>
-    <div class="form-row"><div class="form-group"><label class="flabel">Product Name</label><input type="text" class="finput" id="p_name" placeholder="Adobe Photoshop"/></div><div class="form-group"><label class="flabel">Category</label><input type="text" class="finput" id="p_category" placeholder="Adobe"/></div></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Product Type</label><select class="fselect" id="p_type"><option value="software">Software / Subscription</option><option value="social">Social Media Growth</option><option value="ai">AI Tools</option></select></div><div class="form-group"><label class="flabel">Price (USD $)</label><input type="number" class="finput" id="p_price" placeholder="12.99" min="0.01" step="0.01"/><div class="form-hint">Enter price in USD — the website auto-converts to EGP/SAR for customers.</div></div></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Period</label><select class="fselect" id="p_period"><option value="month">Monthly</option><option value="year">Yearly</option><option value="package">Package (one-time)</option><option value="lifetime">Lifetime</option></select></div><div class="form-group"><label class="flabel">Icon (Emoji)</label><input type="text" class="finput" id="p_icon" placeholder="🎨"/></div></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Badge (optional)</label><input type="text" class="finput" id="p_badge" placeholder="Popular / Hot / New"/></div><div class="form-group"><label class="flabel">Badge Color</label><select class="fselect" id="p_bc"><option value="bg-gold">Gold</option><option value="bg-hot">Red / Hot</option><option value="bg-blue">Blue</option><option value="bg-purple">Purple</option></select></div></div>
+    <input type="hidden" id="editProdId">
+    <div class="form-row"><div class="form-group"><label class="flabel">Product Name</label><input type="text" class="finput" id="p_name" placeholder="Adobe Photoshop"></div><div class="form-group"><label class="flabel">Category</label><input type="text" class="finput" id="p_category" placeholder="Adobe"></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Product Type</label><select class="fselect" id="p_type"><option value="software">Software / Subscription</option><option value="social">Social Media Growth</option><option value="ai">AI Tools</option></select></div><div class="form-group"><label class="flabel">Price (USD $)</label><input type="number" class="finput" id="p_price" placeholder="12.99" min="0.01" step="0.01"><div class="form-hint">Enter price in USD — the website auto-converts to EGP/SAR for customers.</div></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Period</label><select class="fselect" id="p_period"><option value="month">Monthly</option><option value="year">Yearly</option><option value="package">Package (one-time)</option><option value="lifetime">Lifetime</option></select></div><div class="form-group"><label class="flabel">Icon (Emoji)</label><input type="text" class="finput" id="p_icon" placeholder="🎨"></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Badge (optional)</label><input type="text" class="finput" id="p_badge" placeholder="Popular / Hot / New"></div><div class="form-group"><label class="flabel">Badge Color</label><select class="fselect" id="p_bc"><option value="bg-gold">Gold</option><option value="bg-hot">Red / Hot</option><option value="bg-blue">Blue</option><option value="bg-purple">Purple</option></select></div></div>
     <div class="form-group"><label class="flabel">Description</label><textarea class="ftextarea" id="p_desc" placeholder="Brief product description..."></textarea></div>
     <div class="form-group"><label class="flabel">Features (one per line)</label><textarea class="ftextarea" id="p_feats" placeholder="Feature one&#10;Feature two&#10;Feature three"></textarea></div>
     <div class="mo-actions"><button class="btn-sm btn-outline" onclick="closeProdModal()">Cancel</button><button class="btn-sm" onclick="saveProd()">Save Product</button></div>
@@ -240,7 +217,7 @@ tr:hover td{background:rgba(201,168,76,.015);}
 <div class="ov" id="statusModal">
   <div class="mo" style="max-width:360px">
     <div class="mo-title">Update Order Status</div>
-    <input type="hidden" id="statusOrderId"/>
+    <input type="hidden" id="statusOrderId">
     <label class="flabel">New Status</label>
     <select class="fselect" id="newStatus" style="margin-bottom:20px"><option value="Pending">Pending</option><option value="Completed">Completed</option><option value="Cancelled">Cancelled</option></select>
     <div class="mo-actions"><button class="btn-sm btn-outline" onclick="document.getElementById('statusModal').classList.remove('open')">Cancel</button><button class="btn-sm" onclick="applyStatus()">Update</button></div>
@@ -252,9 +229,9 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="mo-title">Issue New Invoice</div>
     <div class="config-note">Generate a manual invoice — all details will be saved and a QR code will be available.</div>
     <div class="form-group"><label class="flabel">Select Product</label><select class="fselect" id="m_product_select" onchange="autoFillProductData()"><option value="">-- Choose from Products --</option></select></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Customer Name</label><input type="text" class="finput" id="m_cust_name" placeholder="John Doe"/></div><div class="form-group"><label class="flabel">Customer Email</label><input type="email" class="finput" id="m_cust_email" placeholder="client@example.com"/></div></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Price (USD)</label><input type="number" class="finput" id="m_price" step="0.01"/></div><div class="form-group"><label class="flabel">Currency</label><select class="fselect" id="m_currency"><option value="USD">USD ($)</option><option value="EGP">EGP (ج.م)</option><option value="SAR">SAR (ر.س)</option></select></div></div>
-    <div class="form-row"><div class="form-group"><label class="flabel">Payment Method</label><select class="fselect" id="m_method"><option value="PayPal">PayPal</option><option value="Bank Transfer">Bank Transfer</option><option value="Cash">Cash / Manual</option></select></div><div class="form-group"><label class="flabel">Invoice Date (optional)</label><input type="date" class="finput" id="m_date" /><div class="form-hint">Leave empty to use today's date.</div></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Customer Name</label><input type="text" class="finput" id="m_cust_name" placeholder="John Doe"></div><div class="form-group"><label class="flabel">Customer Email</label><input type="email" class="finput" id="m_cust_email" placeholder="client@example.com"></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Price (USD)</label><input type="number" class="finput" id="m_price" step="0.01"></div><div class="form-group"><label class="flabel">Currency</label><select class="fselect" id="m_currency"><option value="USD">USD ($)</option><option value="EGP">EGP (ج.م)</option><option value="SAR">SAR (ر.س)</option></select></div></div>
+    <div class="form-row"><div class="form-group"><label class="flabel">Payment Method</label><select class="fselect" id="m_method"><option value="PayPal">PayPal</option><option value="Bank Transfer">Bank Transfer</option><option value="Cash">Cash / Manual</option></select></div><div class="form-group"><label class="flabel">Invoice Date (optional)</label><input type="date" class="finput" id="m_date"><div class="form-hint">Leave empty to use today's date.</div></div></div>
     <div class="mo-actions"><button class="btn-sm btn-outline" onclick="closeManualInvoiceModal()">Cancel</button><button class="btn-sm" onclick="generateManualInvoice()">🚀 Generate & Save Invoice</button></div>
   </div>
 </div>
@@ -262,17 +239,16 @@ tr:hover td{background:rgba(201,168,76,.015);}
 <div class="toast" id="toast"></div>
 
 <script>
-// Helper functions
+// ---------- Helper functions ----------
 function getS(){try{return JSON.parse(localStorage.getItem('pd_settings'))||{};}catch(e){return{};}}
 function setS(o){localStorage.setItem('pd_settings',JSON.stringify(o));}
 function getOrders(){try{return JSON.parse(localStorage.getItem('pd_orders'))||[];}catch(e){return[];}}
 function setOrders(o){localStorage.setItem('pd_orders',JSON.stringify(o));}
 
-// Login - fixed with reset
+// ---------- Login ----------
 function doLogin(){
   const pw = document.getElementById('loginPassword').value;
   let s = getS();
-  // If no settings or password field is undefined, set default
   if(!s.adminPassword) s.adminPassword = 'prime2024';
   if(pw === s.adminPassword){
     document.getElementById('loginScreen').style.display = 'none';
@@ -280,7 +256,6 @@ function doLogin(){
     loadAll();
   } else {
     document.getElementById('loginErr').style.display = 'block';
-    console.log('Entered:', pw, 'Expected:', s.adminPassword);
   }
 }
 function logout(){
@@ -290,6 +265,7 @@ function logout(){
   document.getElementById('loginErr').style.display = 'none';
 }
 
+// ---------- Tabs ----------
 function showTab(tab,el){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
@@ -301,7 +277,6 @@ function showTab(tab,el){
   if(tab==='products'){ renderProdStats(); renderProdsTable(); }
   if(tab==='settings') loadSettingsForm();
 }
-
 function loadAll(){
   renderOrderStats();
   renderOrdersTable();
@@ -310,7 +285,7 @@ function loadAll(){
   loadSettingsForm();
 }
 
-// Orders
+// ---------- Orders ----------
 function renderOrderStats(){
   const orders=getOrders();
   const total=orders.reduce((a,o)=>a+parseFloat(o.price),0);
@@ -323,7 +298,6 @@ function renderOrderStats(){
     <div class="stat-card"><div class="s-label">Completed</div><div class="s-val" style="color:#5deb7a">${completed}</div></div>
   `;
 }
-
 function renderOrdersTable(){
   const orders=getOrders();
   const q=(document.getElementById('orderSearch')||{value:''}).value.toLowerCase();
@@ -340,7 +314,7 @@ function renderOrdersTable(){
   const tbody=document.getElementById('ordersTable');
   if(!tbody)return;
   if(filtered.length===0){
-    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found.</span></td>`;
+    tbody.innerHTML=`<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--muted)">No orders found.</span></tr>`;
     return;
   }
   tbody.innerHTML=filtered.map(o=>{
@@ -367,7 +341,7 @@ function renderOrdersTable(){
   }).join('');
 }
 
-// Invoices
+// ---------- Invoices ----------
 function renderInvoiceStats(){
   const orders=getOrders().filter(o=>o.invoiceNumber);
   const now=new Date();
@@ -378,7 +352,6 @@ function renderInvoiceStats(){
   document.getElementById('is_verified').textContent=orders.filter(o=>o.status==='Completed').length;
   document.getElementById('is_revenue').textContent='$'+totalRevenue.toFixed(2);
 }
-
 function renderInvoicesTable(){
   const orders=getOrders().filter(o=>o.invoiceNumber);
   const search=document.getElementById('searchInvoice').value.toLowerCase();
@@ -398,7 +371,6 @@ function renderInvoicesTable(){
     tbody.appendChild(tr);
   });
 }
-
 function createAdminInvoiceURL(order){
   const baseURL = '/PrimeDigitals/invoice.html';
   const params = new URLSearchParams({
@@ -422,7 +394,6 @@ function createAdminInvoiceURL(order){
   });
   return `${baseURL}?${params.toString()}`;
 }
-
 function copyInvoiceLink(url){ navigator.clipboard.writeText(url).then(()=>showToast('✅ Invoice link copied!','success')); }
 async function refreshInvoicesFromFirebase(){
   showToast('Refreshing from Firebase...','success');
@@ -464,15 +435,24 @@ function exportOrdersCSV(){
 }
 function printInvoice(id){ const o=getOrders().find(x=>x.id===id); if(o) window.open(createAdminInvoiceURL(o), '_blank'); else showToast('Order not found','error'); }
 
-// Manual invoice
+// ---------- Manual Invoice (FIXED) ----------
 function openInvoiceModal(){
+  console.log("openInvoiceModal called");
   const allProds = getProds();
   const select = document.getElementById('m_product_select');
+  if(!select) { console.error("Product select not found"); return; }
   select.innerHTML = '<option value="">-- Choose from Products --</option>' + allProds.map(p => `<option value="${p.id}">${p.name} - $${p.price}</option>`).join('');
-  document.getElementById('m_date').value = new Date().toISOString().split('T')[0];
-  document.getElementById('manualInvoiceModal').classList.add('open');
+  const today = new Date().toISOString().split('T')[0];
+  const dateField = document.getElementById('m_date');
+  if(dateField) dateField.value = today;
+  const modal = document.getElementById('manualInvoiceModal');
+  if(modal) modal.classList.add('open');
+  else console.error("Manual invoice modal not found");
 }
-function closeManualInvoiceModal(){ document.getElementById('manualInvoiceModal').classList.remove('open'); }
+function closeManualInvoiceModal(){
+  const modal = document.getElementById('manualInvoiceModal');
+  if(modal) modal.classList.remove('open');
+}
 function autoFillProductData(){
   const id = document.getElementById('m_product_select').value;
   const prod = getProds().find(p => String(p.id) === String(id));
@@ -495,7 +475,7 @@ async function generateManualInvoice(){
     invoiceNumber: invoiceNumber,
     date: finalDate,
     product: prod.name,
-    category: prod.cat || "Custom",
+    category: prod.cat || prod.category || "Custom",
     type: prod.type || "software",
     price: parseFloat(price).toFixed(2),
     priceDisplay: `${currency} ${parseFloat(price).toFixed(2)}`,
@@ -505,7 +485,7 @@ async function generateManualInvoice(){
     paymentMethod: method,
     status: 'Completed',
     period: prod.period || 'Manual',
-    description: prod.desc || '',
+    description: prod.desc || prod.description || '',
     features: (prod.feats || []).join('||')
   };
   if(window.fbAddManualOrder) await window.fbAddManualOrder(orderData);
@@ -519,12 +499,22 @@ async function generateManualInvoice(){
   else{ navigator.clipboard.writeText(invUrl); showToast('Invoice link copied!','success'); }
 }
 
-// Products
-const DEF = [ /* same as before, omitted for brevity but included in actual file */ ];
+// ---------- Products (default data) ----------
+const DEF = [
+  {id:1,name:"CapCut Pro",cat:"Video Editing",type:"software",price:5.99,period:"month",badge:"Popular",bc:"bg-gold",icon:"🎬",desc:"Full CapCut Pro with AI features.",feats:["All premium templates","AI auto-captions","No watermark"]},
+  {id:2,name:"Adobe Creative Cloud",cat:"Adobe",type:"software",price:19.99,period:"month",badge:"Best Value",bc:"bg-gold",icon:"🎨",desc:"All 20+ Adobe apps.",feats:["20+ Adobe apps","100GB cloud","Adobe Fonts"]},
+  {id:3,name:"Adobe Photoshop",cat:"Adobe",type:"software",price:12.99,period:"month",badge:"",bc:"",icon:"📷",desc:"World-leading photo editor.",feats:["Neural AI filters","Content-Aware Fill","Smart Objects"]},
+  {id:4,name:"Adobe Illustrator",cat:"Adobe",type:"software",price:12.99,period:"month",badge:"",bc:"",icon:"✏️",desc:"Professional vector design.",feats:["Infinite canvas","Variable fonts","Puppet Warp"]},
+  {id:5,name:"Wix Premium",cat:"Website",type:"software",price:8.99,period:"month",badge:"",bc:"",icon:"🌐",desc:"Professional websites.",feats:["Custom domain","No Wix ads","Advanced SEO"]},
+  {id:6,name:"TikTok Followers",cat:"Social Media",type:"social",price:4.99,period:"package",badge:"Hot",bc:"bg-hot",icon:"🎵",desc:"1,000 real TikTok followers.",feats:["1,000 followers","Gradual delivery","No password"]},
+  {id:7,name:"Instagram Followers",cat:"Social Media",type:"social",price:4.99,period:"package",badge:"Hot",bc:"bg-hot",icon:"📷",desc:"1,000 real Instagram followers.",feats:["1,000 followers","Gradual delivery","No password"]},
+  {id:8,name:"ChatGPT Plus",cat:"AI Tools",type:"ai",price:14.99,period:"month",badge:"Top Seller",bc:"bg-blue",icon:"🤖",desc:"GPT-4o access.",feats:["GPT-4o","DALL·E","Voice mode"]},
+  {id:9,name:"Midjourney",cat:"AI Tools",type:"ai",price:9.99,period:"month",badge:"",bc:"",icon:"🖼️",desc:"AI artwork generation.",feats:["Unlimited gen","All models","Commercial use"]},
+  {id:10,name:"Canva Pro",cat:"AI Tools",type:"ai",price:7.99,period:"month",badge:"",bc:"",icon:"🎯",desc:"Full Canva Pro with AI tools.",feats:["AI image gen","Background remover","Brand Kit"]}
+];
 function getProds(){ try{ return JSON.parse(localStorage.getItem('pd_products'))||DEF; }catch(e){ return DEF; } }
 function setProds(p){ localStorage.setItem('pd_products',JSON.stringify(p)); }
 if(!localStorage.getItem('pd_products')) setProds(DEF);
-
 function renderProdStats(){
   const p=getProds();
   document.getElementById('prodStatsRow').innerHTML=`<div class="stat-card"><div class="s-label">Total Products</div><div class="s-val">${p.length}</div></div><div class="stat-card"><div class="s-label">Software</div><div class="s-val">${p.filter(x=>x.type==='software').length}</div></div><div class="stat-card"><div class="s-label">Social Media</div><div class="s-val" style="color:#c085ff">${p.filter(x=>x.type==='social').length}</div></div><div class="stat-card"><div class="s-label">AI Tools</div><div class="s-val" style="color:#5bcfff">${p.filter(x=>x.type==='ai').length}</div></div>`;
@@ -559,7 +549,7 @@ function saveProd(){
 }
 function deleteProd(id){ if(confirm('Delete this product?')){ const prods=getProds(); const prod=prods.find(x=>String(x.id)===String(id)); if(prod&&prod._fbId&&window.fbDeleteProd) window.fbDeleteProd(prod._fbId); setProds(prods.filter(x=>String(x.id)!==String(id))); renderProdStats(); renderProdsTable(); showToast('Product deleted','success'); } }
 
-// Settings
+// ---------- Settings ----------
 function loadSettingsForm(){
   const s=getS();
   document.getElementById('s_storeEmail').value=s.storeEmail||'';
@@ -613,6 +603,7 @@ function saveSettings(){
 }
 function showToast(msg,type='success'){ const t=document.getElementById('toast'); t.textContent=msg; t.className=`toast ${type} show`; setTimeout(()=>t.classList.remove('show'),3000); }
 
+// Close modals when clicking outside
 document.getElementById('prodModal').addEventListener('click',e=>{if(e.target.id==='prodModal') closeProdModal();});
 document.getElementById('statusModal').addEventListener('click',e=>{if(e.target.id==='statusModal') document.getElementById('statusModal').classList.remove('open');});
 document.getElementById('manualInvoiceModal').addEventListener('click',e=>{if(e.target.id==='manualInvoiceModal') closeManualInvoiceModal();});
