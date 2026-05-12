@@ -575,7 +575,7 @@ tr:hover td{background:rgba(201,168,76,.015);}
 <div class="ov" id="manualInvoiceModal">
   <div class="mo" style="max-width: 600px;">
     <div class="mo-title">Issue New Invoice</div>
-    <div class="config-note">إصدار فاتورة يدوية سيقوم بحفظها في Firebase لتكون صالحة للتحقق عبر QR Code.</div>
+    <div class="config-note">Generate a manual invoice — all details will be saved and a QR code will be available.</div>
     
     <div class="form-group">
         <label class="flabel">Select Product</label>
@@ -592,12 +592,28 @@ tr:hover td{background:rgba(201,168,76,.015);}
     <div class="form-row">
         <div class="form-group"><label class="flabel">Price (USD)</label><input type="number" class="finput" id="m_price" step="0.01"/></div>
         <div class="form-group">
+            <label class="flabel">Currency</label>
+            <select class="fselect" id="m_currency">
+                <option value="USD">USD ($)</option>
+                <option value="EGP">EGP (ج.م)</option>
+                <option value="SAR">SAR (ر.س)</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
             <label class="flabel">Payment Method</label>
             <select class="fselect" id="m_method">
                 <option value="PayPal">PayPal</option>
                 <option value="Bank Transfer">Bank Transfer</option>
                 <option value="Cash">Cash / Manual</option>
             </select>
+        </div>
+        <div class="form-group">
+            <label class="flabel">Invoice Date (optional)</label>
+            <input type="date" class="finput" id="m_date" />
+            <div class="form-hint">Leave empty to use today's date.</div>
         </div>
     </div>
 
@@ -801,7 +817,10 @@ function createAdminInvoiceURL(order){
     date: order.date,
     credEmail: order.activationEmail || '',
     credPassword: order.accountPassword || '',
-    credUsername: order.socialUsername || ''
+    credUsername: order.socialUsername || '',
+    category: order.category || '',
+    description: order.description || '',
+    features: order.features || ''
   });
   return `${baseURL}?${params.toString()}`;
 }
@@ -881,12 +900,15 @@ function printInvoice(id){
   window.open(invUrl, '_blank');
 }
 
-// ── MANUAL INVOICE FUNCTIONS ──────────────────────────────
+// ── MANUAL INVOICE FUNCTIONS (UPDATED) ─────────────────────
 function openInvoiceModal() {
     const pSelect = document.getElementById('m_product_select');
     const prods = getProds();
     pSelect.innerHTML = '<option value="">-- Choose from Products --</option>' + 
         prods.map(p => `<option value="${p.id}">${p.name} - $${p.price}</option>`).join('');
+    // Set default date to today
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('m_date').value = today;
     document.getElementById('manualInvoiceModal').classList.add('open');
 }
 
@@ -897,37 +919,49 @@ function closeManualInvoiceModal() {
 function autoFillProductData() {
     const id = document.getElementById('m_product_select').value;
     const prod = getProds().find(p => String(p.id) === String(id));
-    if(prod) { document.getElementById('m_price').value = prod.price; }
+    if(prod) {
+        document.getElementById('m_price').value = prod.price;
+        // Optionally store product details for later use
+        window._selectedProd = prod;
+    } else {
+        window._selectedProd = null;
+    }
 }
 
 async function generateManualInvoice() {
     const prodId = document.getElementById('m_product_select').value;
     const name = document.getElementById('m_cust_name').value.trim();
     const email = document.getElementById('m_cust_email').value.trim();
-    const price = document.getElementById('m_price').value;
+    let price = document.getElementById('m_price').value;
+    const currency = document.getElementById('m_currency').value;
     const method = document.getElementById('m_method').value;
+    const dateValue = document.getElementById('m_date').value;
 
     if(!email || !price) { showToast('Please fill Email and Price', 'error'); return; }
 
-    const prod = getProds().find(p => String(p.id) === String(prodId)) || { name: "Manual Invoice Service", cat: "Custom", type: "software" };
+    const prod = getProds().find(p => String(p.id) === String(prodId)) || { name: "Manual Invoice Service", cat: "Custom", type: "software", price: 0, period: "Manual", description: "", feats: [] };
+    if(!price) price = prod.price;
     
     const invoiceNumber = 'INV-' + Math.floor(100000 + Math.random() * 900000);
+    const finalDate = dateValue ? dateValue : new Date().toISOString().split('T')[0];
     
     const orderData = {
         id: 'MAN-' + Date.now(),
         invoiceNumber: invoiceNumber,
-        date: new Date().toISOString(),
+        date: finalDate,
         product: prod.name,
-        category: prod.cat || "Custom",
+        category: prod.cat || prod.category || "Custom",
         type: prod.type || "software",
         price: parseFloat(price).toFixed(2),
-        priceDisplay: '$' + parseFloat(price).toFixed(2),
+        priceDisplay: `${currency} ${parseFloat(price).toFixed(2)}`,
+        currency: currency,
         customerEmail: email,
         payerName: name,
         paymentMethod: method,
         status: 'Completed',
-        currency: 'USD',
-        period: prod.period || 'Manual'
+        period: prod.period || 'Manual',
+        description: prod.desc || prod.description || '',
+        features: (prod.feats || []).join('||')  // store features as a string separated by ||
     };
 
     if(window.fbAddManualOrder) {
@@ -1001,7 +1035,7 @@ function renderProdsTable(){
         <button class="btn-sm btn-outline" onclick="openEditProd('${x.id}')">Edit</button>
         <button class="btn-sm btn-danger" onclick="deleteProd('${x.id}')">Delete</button>
       </div></td>
-    </table>
+    </tr>
   `).join('');
 }
 
