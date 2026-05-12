@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title>Electronic Invoice - PrimeDigitals</title>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet"/>
 <style>
-/* نفس الستايلات السابقة كما هي (لم تتغير) */
 :root{
   --gold:#C9A84C;--gl:#E2C06A;--gd:#9A7835;
   --bg:#09090F;--bg2:#111118;--bg3:#18181F;
@@ -19,9 +17,9 @@
 body{
   background:var(--bg);
   color:var(--text);
-  font-family:'DM Sans',sans-serif;
+  font-family:'Cairo',sans-serif;
   padding:20px;
-  line-height:1.5;
+  line-height:1.6;
   position:relative;
 }
 
@@ -33,7 +31,7 @@ body{
   background:var(--bg2);
   border:2px solid var(--green);
   border-radius:12px;
-  padding:12px 20px;
+  padding:15px 25px;
   display:flex;
   align-items:center;
   gap:12px;
@@ -54,22 +52,29 @@ body{
   animation:pulse 1.5s infinite;
 }
 .badge-icon{
-  font-size:28px;
+  font-size:32px;
   line-height:1;
 }
 .badge-content h3{
   font-size:14px;
   font-weight:700;
-  margin-bottom:2px;
-  letter-spacing:0;
+  margin-bottom:3px;
+  text-transform:uppercase;
+  letter-spacing:1px;
 }
 .badge-content p{
-  font-size:11px;
+  font-size:12px;
   color:var(--muted);
 }
-.badge-verified{ color:var(--green); }
-.badge-pending{ color:var(--orange); }
-.badge-invalid{ color:var(--red); }
+.badge-verified{
+  color:var(--green);
+}
+.badge-pending{
+  color:var(--orange);
+}
+.badge-invalid{
+  color:var(--red);
+}
 
 @keyframes slideIn{
   from{transform:translateX(120%);opacity:0;}
@@ -115,7 +120,6 @@ body{
   to{transform:rotate(360deg);}
 }
 .logo{
-  font-family:'Cormorant Garamond',serif;
   font-size:42px;
   font-weight:900;
   margin-bottom:8px;
@@ -128,12 +132,12 @@ body{
   opacity:0.9;
   position:relative;
   z-index:1;
-  font-weight:500;
+  font-weight:600;
 }
 .invoice-status{
   background:rgba(0,0,0,0.25);
   display:inline-block;
-  padding:8px 20px;
+  padding:10px 24px;
   border-radius:25px;
   margin-top:20px;
   font-weight:700;
@@ -177,7 +181,7 @@ body{
 }
 .meta-section p strong{
   color:var(--gold);
-  margin-right:8px;
+  margin-left:8px;
 }
 .invoice-number{
   font-size:22px;
@@ -202,7 +206,7 @@ body{
 }
 .items-table th{
   padding:15px;
-  text-align:left;
+  text-align:right;
   font-size:13px;
   text-transform:uppercase;
   letter-spacing:1.5px;
@@ -218,12 +222,12 @@ body{
 .item-name{
   font-weight:700;
   color:var(--text);
-  font-size:18px;
+  font-size:16px;
 }
 .item-desc{
   font-size:13px;
   color:var(--muted);
-  margin-top:6px;
+  margin-top:5px;
 }
 .item-badge{
   display:inline-block;
@@ -236,22 +240,22 @@ body{
   margin-right:8px;
 }
 .features-list{
-  margin-top:10px;
-  padding-left:20px;
+  margin-top:8px;
+  padding-right:20px;
   list-style:none;
 }
 .features-list li{
   font-size:12px;
   color:var(--muted);
-  margin-bottom:4px;
+  margin-bottom:3px;
   position:relative;
-  padding-left:12px;
+  padding-right:12px;
 }
 .features-list li::before{
   content:'•';
   color:var(--gold);
   position:absolute;
-  left:0;
+  right:0;
 }
 
 /* Credentials Box */
@@ -330,7 +334,7 @@ body{
   color:var(--gold);
 }
 
-/* QR Section */
+/* QR Section (no extra text) */
 .qr-section{
   text-align:center;
   padding:40px 30px;
@@ -350,21 +354,8 @@ body{
   margin:15px 0;
   box-shadow:0 4px 20px rgba(201,168,76,0.2);
 }
-.qr-link{
-  margin-top:15px;
-  font-size:12px;
-  color:var(--muted);
-  word-break:break-all;
-}
-.qr-link a{
-  color:var(--gold);
-  text-decoration:none;
-}
-.qr-link a:hover{
-  text-decoration:underline;
-}
 
-/* Footer */
+/* Footer - simple */
 .invoice-footer{
   padding:25px 35px;
   background:var(--bg3);
@@ -388,7 +379,7 @@ body{
   border:none;
   padding:15px 30px;
   border-radius:50px;
-  font-family:'DM Sans',sans-serif;
+  font-family:'Cairo',sans-serif;
   font-weight:700;
   cursor:pointer;
   font-size:15px;
@@ -402,6 +393,7 @@ body{
 .print-btn:hover{
   background:var(--gl);
   transform:translateY(-3px);
+  box-shadow:0 8px 25px rgba(201,168,76,0.5);
 }
 
 /* Loading Spinner */
@@ -461,87 +453,115 @@ body{
 <!-- Loading Screen -->
 <div class="loading" id="loadingScreen">
   <div class="spinner"></div>
-  <div class="loading-text">Verifying invoice...</div>
+  <div class="loading-text">جاري التحقق من الفاتورة...</div>
 </div>
 
 <!-- Verification Badge -->
 <div class="verification-badge loading" id="verifyBadge">
   <div class="badge-icon">⏳</div>
   <div class="badge-content">
-    <h3 id="badgeTitle">Verifying...</h3>
-    <p id="badgeSubtitle">Please wait</p>
+    <h3 id="badgeTitle">جاري التحقق...</h3>
+    <p id="badgeSubtitle">يرجى الانتظار</p>
   </div>
 </div>
 
 <!-- Print Button -->
 <button class="print-btn" onclick="window.print()">
   <span>🖨️</span>
-  <span>Print Invoice</span>
+  <span>طباعة الفاتورة</span>
 </button>
 
 <!-- Invoice Container -->
 <div class="invoice-container">
-  <!-- Header -->
   <div class="invoice-header">
     <div class="logo">PrimeDigitals</div>
-    <div class="tagline">Your trusted digital marketplace</div>
-    <div class="invoice-status" id="statusBadge">✓ Paid Invoice</div>
+    <div class="tagline">منصتك الموثوقة للاشتراكات الرقمية</div>
+    <div class="invoice-status" id="statusBadge">✓ فاتورة مدفوعة</div>
   </div>
 
-  <!-- Body -->
   <div class="invoice-body">
     <div class="invoice-meta">
       <div class="meta-section">
-        <h3>📄 Invoice Information</h3>
+        <h3>📄 معلومات الفاتورة</h3>
         <p class="invoice-number" id="invoiceNumber">INV-000000</p>
-        <p><strong>Date:</strong> <span id="invoiceDate"></span></p>
-        <p><strong>Payment Method:</strong> <span id="paymentMethod"></span></p>
-        <p><strong>Status:</strong> <span id="invoiceStatus"></span></p>
+        <p><strong>التاريخ:</strong> <span id="invoiceDate"></span></p>
+        <p><strong>طريقة الدفع:</strong> <span id="paymentMethod"></span></p>
+        <p><strong>الحالة:</strong> <span id="invoiceStatus"></span></p>
       </div>
       <div class="meta-section">
-        <h3>👤 Customer Information</h3>
-        <p><strong>Name:</strong> <span id="customerName"></span></p>
-        <p><strong>Email:</strong> <span id="customerEmail"></span></p>
-        <p><strong>Order ID:</strong> <span id="orderId"></span></p>
+        <h3>👤 معلومات العميل</h3>
+        <p><strong>الاسم:</strong> <span id="customerName"></span></p>
+        <p><strong>البريد:</strong> <span id="customerEmail"></span></p>
+        <p><strong>رقم الطلب:</strong> <span id="orderId"></span></p>
       </div>
     </div>
 
     <table class="items-table">
       <thead>
-        <tr><th>Product / Service</th><th style="text-align:center;">Period</th><th style="text-align:center;">Currency</th><th style="text-align:right;">Amount</th></tr>
+        <tr>
+          <th>المنتج</th>
+          <th style="text-align:center;width:120px;">الفترة</th>
+          <th style="text-align:center;width:100px;">العملة</th>
+          <th style="text-align:left;width:130px;">السعر</th>
+        </tr>
       </thead>
       <tbody id="itemsBody"></tbody>
-    更难
+    </table>
 
     <div class="credentials-box" id="credentialsBox" style="display:none;">
-      <h3>🔐 Access Credentials</h3>
-      <div class="credential-item"><span class="credential-label">Email</span><span class="credential-value" id="credEmail">-</span></div>
-      <div class="credential-item"><span class="credential-label">Password</span><span class="credential-value" id="credPassword">-</span></div>
-      <div class="credential-item" id="credUsernameRow" style="display:none;"><span class="credential-label">Username</span><span class="credential-value" id="credUsername">-</span></div>
-      <div class="credentials-warning"><span>⚠️</span><span>Please save these credentials. They will not be shown again.</span></div>
+      <h3>🔐 بيانات الوصول السرية</h3>
+      <div class="credential-item">
+        <span class="credential-label">البريد الإلكتروني</span>
+        <span class="credential-value" id="credEmail">-</span>
+      </div>
+      <div class="credential-item">
+        <span class="credential-label">كلمة المرور</span>
+        <span class="credential-value" id="credPassword">-</span>
+      </div>
+      <div class="credential-item" id="credUsernameRow" style="display:none;">
+        <span class="credential-label">اسم المستخدم</span>
+        <span class="credential-value" id="credUsername">-</span>
+      </div>
+      <div class="credentials-warning">
+        <span>⚠️</span>
+        <span>يرجى حفظ هذه البيانات في مكان آمن. لن تتمكن من استرجاعها لاحقاً.</span>
+      </div>
     </div>
 
     <div class="totals">
-      <div class="total-row"><span>Subtotal:</span><span id="subtotal">$0.00</span></div>
-      <div class="total-row"><span>Discount:</span><span id="discount" style="color:var(--green);">$0.00</span></div>
-      <div class="total-row final"><span>Total Paid:</span><span id="grandTotal">$0.00</span></div>
+      <div class="total-row">
+        <span>المجموع الفرعي:</span>
+        <span id="subtotal">$0.00</span>
+      </div>
+      <div class="total-row">
+        <span>الخصم:</span>
+        <span id="discount" style="color:var(--green);">$0.00</span>
+      </div>
+      <div class="total-row final">
+        <span>الإجمالي المدفوع:</span>
+        <span id="grandTotal">$0.00</span>
+      </div>
     </div>
   </div>
 
   <div class="qr-section">
-    <h3>📱 QR Verification Code</h3>
+    <h3>📱 رمز التحقق السريع (QR Code)</h3>
     <div id="qrcode"></div>
-    <div id="qrLinkContainer" class="qr-link"></div>
+    <!-- تم حذف النص التوضيحي -->
   </div>
 
   <div class="invoice-footer">
     <p class="company-name">PrimeDigitals</p>
-    <p>Thank you for trusting our services</p>
-    <p style="margin-top:15px;font-size:11px;">© 2026 PrimeDigitals. All rights reserved.</p>
+    <p style="margin:10px 0;">شكراً لثقتك في خدماتنا</p>
+    <p style="margin-top:25px;font-size:11px;opacity:0.7;">
+      © 2026 PrimeDigitals. جميع الحقوق محفوظة.
+    </p>
   </div>
 </div>
 
-<!-- Firebase SDK (نفس الكود السابق) -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+<!-- Firebase SDK -->
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
 import { getFirestore, collection, query, where, getDocs } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
@@ -566,6 +586,12 @@ window.fbCollection = collection;
 </script>
 
 <script>
+// ═══════════════════════════════════════════════════════════════
+//  INVOICE VERIFICATION & DISPLAY (QR FIXED)
+// ═══════════════════════════════════════════════════════════════
+
+let invoiceData = null;
+
 function getUrlParams(){
   const params = new URLSearchParams(window.location.search);
   return {
@@ -607,87 +633,93 @@ function updateVerificationBadge(status, title, subtitle){
   const icon = badge.querySelector('.badge-icon');
   badge.className = 'verification-badge ' + status;
   if(status === 'verified'){
-    badgeTitle.textContent = 'Verified Invoice ✓';
+    badgeTitle.textContent = 'فاتورة موثقة ✓';
     badgeSubtitle.textContent = '';
     icon.textContent = '✅';
     badgeTitle.className = 'badge-verified';
   } else if(status === 'pending'){
-    badgeTitle.textContent = 'Paid Invoice';
+    badgeTitle.textContent = 'فاتورة مدفوعة';
     badgeSubtitle.textContent = '';
     icon.textContent = '💰';
     badgeTitle.className = 'badge-pending';
   } else if(status === 'invalid'){
-    badgeTitle.textContent = 'Invalid Invoice';
+    badgeTitle.textContent = 'فاتورة غير صالحة';
     badgeSubtitle.textContent = '';
     icon.textContent = '❌';
     badgeTitle.className = 'badge-invalid';
   } else {
-    badgeTitle.textContent = title || 'Invoice';
+    badgeTitle.textContent = title || 'فاتورة';
     badgeSubtitle.textContent = subtitle || '';
+    icon.textContent = '⏳';
   }
 }
 
 function formatDisplayDate(dateParam){
   let d = dateParam ? new Date(dateParam) : new Date();
   if(isNaN(d.getTime())) d = new Date();
-  return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return d.toLocaleDateString('ar-EG', { year: 'numeric', month: 'long', day: 'numeric' });
 }
 
 function populateInvoice(data){
+  invoiceData = data;
   document.getElementById('invoiceNumber').textContent = data.invoiceNumber || 'N/A';
   document.getElementById('invoiceDate').textContent = formatDisplayDate(data.date);
   document.getElementById('paymentMethod').textContent = data.paymentMethod || 'N/A';
-  document.getElementById('invoiceStatus').textContent = (data.status === 'Completed' ? 'Paid ✓' : (data.status === 'Pending' ? 'Pending Review' : data.status));
-  document.getElementById('customerName').textContent = data.customerName || data.payerName || 'Customer';
+  let statusText = data.status === 'Completed' ? 'مدفوعة ✓' : (data.status === 'Pending' ? 'قيد المراجعة' : data.status);
+  document.getElementById('invoiceStatus').textContent = statusText;
+  document.getElementById('customerName').textContent = data.customerName || data.payerName || 'عميل';
   document.getElementById('customerEmail').textContent = data.customerEmail || '';
   document.getElementById('orderId').textContent = (data.orderId || data.id || '').substring(0,8).toUpperCase();
-  
+
   const statusBadge = document.getElementById('statusBadge');
   if(data.status === 'Completed'){
-    statusBadge.textContent = '✓ Paid Invoice';
+    statusBadge.textContent = '✓ فاتورة مدفوعة';
     statusBadge.style.background = 'rgba(93,235,122,0.3)';
   } else if(data.status === 'Pending'){
-    statusBadge.textContent = '⏳ Pending Review';
+    statusBadge.textContent = '⏳ قيد المراجعة';
     statusBadge.style.background = 'rgba(255,179,71,0.3)';
   } else {
-    statusBadge.textContent = 'Verified Invoice';
+    statusBadge.textContent = 'فاتورة موثقة';
     statusBadge.style.background = 'rgba(201,168,76,0.3)';
   }
-  
+
   const priceNum = parseFloat(data.price || 0);
   const currency = data.currency || 'USD';
-  const periodText = data.period || 'Monthly';
-  const categoryText = data.category || (data.type === 'social' ? 'Social Media' : (data.type === 'ai' ? 'AI Tools' : 'Digital Subscription'));
+  const periodText = data.period || 'شهري';
+  const categoryText = data.category || (data.type === 'social' ? 'وسائل التواصل' : (data.type === 'ai' ? 'أدوات ذكاء اصطناعي' : 'اشتراك رقمي'));
   
   let featuresHtml = '';
   if(data.features){
     const featuresArray = data.features.split('||');
-    if(featuresArray.length && featuresArray[0] !== '')
+    if(featuresArray.length && featuresArray[0] !== ''){
       featuresHtml = `<ul class="features-list">${featuresArray.map(f => `<li>${f}</li>`).join('')}</ul>`;
+    }
   }
   let descriptionHtml = data.description ? `<div style="margin-top:8px;color:var(--muted);font-size:13px;">${data.description}</div>` : '';
-  
+
   document.getElementById('itemsBody').innerHTML = `
     <tr>
       <td>
-        <div class="item-name">${data.product || 'Digital Product'}</div>
+        <div class="item-name">${data.product || 'منتج رقمي'}</div>
         <div class="item-desc">
           <span class="item-badge">${periodText}</span> ${categoryText}
           ${descriptionHtml}
           ${featuresHtml}
         </div>
-      </td>
-      <td style="text-align:center;">${periodText}</td>
-      <td style="text-align:center;">${currency}</td>
-      <td style="text-align:right;font-weight:900;color:var(--gold);font-size:18px;">${priceNum.toFixed(2)}</td>
+      </div>
+      <td style="text-align:center;font-weight:600;">${periodText}</td>
+      <td style="text-align:center;font-weight:600;">${currency}</td>
+      <td style="text-align:left;font-weight:900;color:var(--gold);font-size:18px;">
+        ${priceNum.toFixed(2)}
+      </div>
     </tr>
   `;
-  
+
   const priceDisplay = `${currency} ${priceNum.toFixed(2)}`;
   document.getElementById('subtotal').textContent = priceDisplay;
   document.getElementById('discount').textContent = `${currency} 0.00`;
   document.getElementById('grandTotal').textContent = priceDisplay;
-  
+
   if(data.credEmail || data.activationEmail || data.credPassword || data.accountPassword){
     const credBox = document.getElementById('credentialsBox');
     credBox.style.display = 'block';
@@ -698,41 +730,29 @@ function populateInvoice(data){
       document.getElementById('credUsername').textContent = data.credUsername || data.socialUsername;
     }
   }
-  
-  // ========== إصلاح QR code ==========
-  const currentUrl = window.location.href;
-  // التأكد من أن الرابط صالح للاستخدام على الإنترنت
-  let finalQrUrl = currentUrl;
-  if (!currentUrl.startsWith('https://primedigitals.github.io') && !currentUrl.startsWith('http://localhost')) {
-    // إذا كان الرابط محلياً أو غير متوقع، نستخدم الرابط الأساسي مع parameters
-    const base = 'https://primedigitals.github.io/PrimeDigitals/invoice.html';
-    finalQrUrl = base + window.location.search;
-  }
-  console.log('QR URL:', finalQrUrl); // للتأكد من الرابط (افتح console المتصفح)
-  
+
+  // 🔧 FIX QR CODE: use the current page's absolute URL (works on GitHub Pages)
+  const qrUrl = window.location.href;
+  console.log('QR URL:', qrUrl);
   const qrContainer = document.getElementById('qrcode');
   qrContainer.innerHTML = '';
   new QRCode(qrContainer, {
-    text: finalQrUrl,
+    text: qrUrl,
     width: 200,
     height: 200,
     colorDark: '#09090F',
     colorLight: '#ffffff',
     correctLevel: QRCode.CorrectLevel.H
   });
-  
-  // إضافة رابط قابل للنقر أسفل QR
-  const linkContainer = document.getElementById('qrLinkContainer');
-  linkContainer.innerHTML = `<a href="${finalQrUrl}" target="_blank" rel="noopener noreferrer">🔗 Invoice Link (click to open / copy)</a>`;
 }
 
 async function initInvoice(){
   const params = getUrlParams();
-  document.querySelector('.loading-text').textContent = 'Verifying invoice...';
+  document.querySelector('.loading-text').textContent = 'جاري التحقق من الفاتورة...';
   if(!params.orderId && !params.invoiceNumber){
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
-      updateVerificationBadge('invalid', 'Invalid Invoice', 'Missing data');
+      updateVerificationBadge('invalid', 'فاتورة غير صالحة', 'بيانات غير كاملة');
     }, 1000);
     return;
   }
@@ -744,7 +764,7 @@ async function initInvoice(){
         updateVerificationBadge('verified', '', '');
         populateInvoice(verification.data);
       } else {
-        updateVerificationBadge('pending', 'Paid Invoice', '');
+        updateVerificationBadge('pending', 'فاتورة مدفوعة', '');
         populateInvoice(params);
       }
     }, 1500);
@@ -752,7 +772,7 @@ async function initInvoice(){
     console.error(error);
     setTimeout(() => {
       document.getElementById('loadingScreen').style.display = 'none';
-      updateVerificationBadge('invalid', 'Error', error.message);
+      updateVerificationBadge('invalid', 'خطأ في التحميل', error.message);
     }, 1000);
   }
 }
